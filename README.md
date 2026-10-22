@@ -20,16 +20,16 @@ O sistema entrevista o usuário por meio de perguntas objetivas sobre suas prefe
 
 O sistema é calibrado para diferenciar com precisão 10 áreas da tecnologia:
 
-1. ** Desenvolvimento Back-end:** Foco em lógica de servidores, construção de APIs REST/gRPC, regras de negócio e modelagem de bancos de dados relacionais e NoSQL.
-2. ** Desenvolvimento Front-end & UI/UX:** Foco em interfaces web responsivas, componentes reativos, design systems, acessibilidade e experiência do usuário final.
-3. ** Ciência de Dados e Machine Learning:** Foco em métodos estatísticos, modelagem preditiva supervisionada/não-supervisionada, Processamento de Linguagem Natural e Inteligência Artificial.
-4. ** Engenharia de Dados:** Foco em arquitetura e escalabilidade de pipelines de dados (ETL/ELT), orquestração de fluxos massivos e infraestrutura para Data Lakes e Data Warehouses.
-5. ** Cibersegurança (Security / Pentesting):** Foco em defesa cibernética, análise de vulnerabilidades, perícia digital, criptografia, redes seguras e testes de invasão éticos.
-6. ** DevOps & SRE:** Foco em automação de esteiras de integração e entrega contínua (CI/CD), orquestração de contêineres em escala (Kubernetes) e confiabilidade operacional (Site Reliability Engineering).
-7. ** Computação em Nuvem (Cloud Architecture):** Foco em desenho de topologias distribuídas, migração corporativa para nuvem (AWS/Azure/GCP), alta disponibilidade e otimização financeira (FinOps).
-8. ** Desenvolvimento Mobile:** Foco no ecossistema de dispositivos móveis (smartphones e tablets), abrangendo desenvolvimento multiplataforma (Flutter/React Native) ou nativo (Swift/Kotlin).
-9. ** Engenharia de Qualidade e Testes (QA):** Foco em automação de baterias de testes (unitários, integração, E2E, carga), prevenção de falhas em esteiras de software e processos de qualidade.
-10. ** Gestão de Produtos (Product Management):** Foco na interseção entre estratégia de negócio, priorização de backlogs, liderança de ritos ágeis (Scrum/Kanban) e alinhamento de stakeholders.
+1.  Desenvolvimento Back-end: Foco em lógica de servidores, construção de APIs REST/gRPC, regras de negócio e modelagem de bancos de dados relacionais e NoSQL.
+2.  Desenvolvimento Front-end & UI/UX: Foco em interfaces web responsivas, componentes reativos, design systems, acessibilidade e experiência do usuário final.
+3.  Ciência de Dados e Machine Learning: Foco em métodos estatísticos, modelagem preditiva supervisionada/não-supervisionada, Processamento de Linguagem Natural e Inteligência Artificial.
+4.  Engenharia de Dados: Foco em arquitetura e escalabilidade de pipelines de dados (ETL/ELT), orquestração de fluxos massivos e infraestrutura para Data Lakes e Data Warehouses.
+5.  Cibersegurança (Security / Pentesting): Foco em defesa cibernética, análise de vulnerabilidades, perícia digital, criptografia, redes seguras e testes de invasão éticos.
+6.  DevOps & SRE: Foco em automação de esteiras de integração e entrega contínua (CI/CD), orquestração de contêineres em escala (Kubernetes) e confiabilidade operacional (Site Reliability Engineering).
+7.  Computação em Nuvem (Cloud Architecture): Foco em desenho de topologias distribuídas, migração corporativa para nuvem (AWS/Azure/GCP), alta disponibilidade e otimização financeira (FinOps).
+8.  Desenvolvimento Mobile: Foco no ecossistema de dispositivos móveis (smartphones e tablets), abrangendo desenvolvimento multiplataforma (Flutter/React Native) ou nativo (Swift/Kotlin).
+9.  Engenharia de Qualidade e Testes (QA): Foco em automação de baterias de testes (unitários, integração, E2E, carga), prevenção de falhas em esteiras de software e processos de qualidade.
+10.  Gestão de Produtos (Product Management): Foco na interseção entre estratégia de negócio, priorização de backlogs, liderança de ritos ágeis (Scrum/Kanban) e alinhamento de stakeholders.
 
 ---
 
