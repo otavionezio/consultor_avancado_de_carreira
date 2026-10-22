@@ -1,4 +1,4 @@
-# 🎓 Consultor Inteligente de Carreiras em TI
+#  Consultor Inteligente de Carreiras em TI
 ### Sistema Especialista Baseado em Regras em Python (Experta & Streamlit)
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -8,7 +8,7 @@
 
 ---
 
-## 📌 Visão Geral do Projeto
+##  Visão Geral do Projeto
 
 O **Consultor Inteligente de Carreiras em TI** é um **Sistema Especialista baseado em regras lógicas** do tipo *SE-ENTÃO* que atua como orientador vocacional avançado em Tecnologia da Informação. 
 
@@ -16,24 +16,24 @@ O sistema entrevista o usuário por meio de perguntas objetivas sobre suas prefe
 
 ---
 
-## 🎯 Escopo: As 10 Trilhas de Carreira
+##  Escopo: As 10 Trilhas de Carreira
 
 O sistema é calibrado para diferenciar com precisão 10 áreas da tecnologia:
 
-1. **⚙️ Desenvolvimento Back-end:** Foco em lógica de servidores, construção de APIs REST/gRPC, regras de negócio e modelagem de bancos de dados relacionais e NoSQL.
-2. **🎨 Desenvolvimento Front-end & UI/UX:** Foco em interfaces web responsivas, componentes reativos, design systems, acessibilidade e experiência do usuário final.
-3. **🧠 Ciência de Dados e Machine Learning:** Foco em métodos estatísticos, modelagem preditiva supervisionada/não-supervisionada, Processamento de Linguagem Natural e Inteligência Artificial.
-4. **🏗️ Engenharia de Dados:** Foco em arquitetura e escalabilidade de pipelines de dados (ETL/ELT), orquestração de fluxos massivos e infraestrutura para Data Lakes e Data Warehouses.
-5. **🛡️ Cibersegurança (Security / Pentesting):** Foco em defesa cibernética, análise de vulnerabilidades, perícia digital, criptografia, redes seguras e testes de invasão éticos.
-6. **♾️ DevOps & SRE:** Foco em automação de esteiras de integração e entrega contínua (CI/CD), orquestração de contêineres em escala (Kubernetes) e confiabilidade operacional (Site Reliability Engineering).
-7. **☁️ Computação em Nuvem (Cloud Architecture):** Foco em desenho de topologias distribuídas, migração corporativa para nuvem (AWS/Azure/GCP), alta disponibilidade e otimização financeira (FinOps).
-8. **📱 Desenvolvimento Mobile:** Foco no ecossistema de dispositivos móveis (smartphones e tablets), abrangendo desenvolvimento multiplataforma (Flutter/React Native) ou nativo (Swift/Kotlin).
-9. **🔍 Engenharia de Qualidade e Testes (QA):** Foco em automação de baterias de testes (unitários, integração, E2E, carga), prevenção de falhas em esteiras de software e processos de qualidade.
-10. **🧭 Gestão de Produtos (Product Management):** Foco na interseção entre estratégia de negócio, priorização de backlogs, liderança de ritos ágeis (Scrum/Kanban) e alinhamento de stakeholders.
+1. ** Desenvolvimento Back-end:** Foco em lógica de servidores, construção de APIs REST/gRPC, regras de negócio e modelagem de bancos de dados relacionais e NoSQL.
+2. ** Desenvolvimento Front-end & UI/UX:** Foco em interfaces web responsivas, componentes reativos, design systems, acessibilidade e experiência do usuário final.
+3. ** Ciência de Dados e Machine Learning:** Foco em métodos estatísticos, modelagem preditiva supervisionada/não-supervisionada, Processamento de Linguagem Natural e Inteligência Artificial.
+4. ** Engenharia de Dados:** Foco em arquitetura e escalabilidade de pipelines de dados (ETL/ELT), orquestração de fluxos massivos e infraestrutura para Data Lakes e Data Warehouses.
+5. ** Cibersegurança (Security / Pentesting):** Foco em defesa cibernética, análise de vulnerabilidades, perícia digital, criptografia, redes seguras e testes de invasão éticos.
+6. ** DevOps & SRE:** Foco em automação de esteiras de integração e entrega contínua (CI/CD), orquestração de contêineres em escala (Kubernetes) e confiabilidade operacional (Site Reliability Engineering).
+7. ** Computação em Nuvem (Cloud Architecture):** Foco em desenho de topologias distribuídas, migração corporativa para nuvem (AWS/Azure/GCP), alta disponibilidade e otimização financeira (FinOps).
+8. ** Desenvolvimento Mobile:** Foco no ecossistema de dispositivos móveis (smartphones e tablets), abrangendo desenvolvimento multiplataforma (Flutter/React Native) ou nativo (Swift/Kotlin).
+9. ** Engenharia de Qualidade e Testes (QA):** Foco em automação de baterias de testes (unitários, integração, E2E, carga), prevenção de falhas em esteiras de software e processos de qualidade.
+10. ** Gestão de Produtos (Product Management):** Foco na interseção entre estratégia de negócio, priorização de backlogs, liderança de ritos ágeis (Scrum/Kanban) e alinhamento de stakeholders.
 
 ---
 
-## 🧠 Arquitetura do Sistema e Encadeamento para Frente
+##  Arquitetura do Sistema e Encadeamento para Frente
 
 ```
                [ Respostas do Usuário / Persona ]
@@ -72,26 +72,26 @@ O sistema utiliza a biblioteca **Experta** (implementação em Python do algorit
 
 ---
 
-## ⚡ Personas de Teste (Validação com 100% de Acerto)
+##  Personas de Teste (Validação com 100% de Acerto)
 
 O sistema possui personas pré-configuradas para demonstração e validação automatizada:
 
 | Persona | Perfil | Trilha Esperada | Diagnóstico Obtido | Status |
 |---|---|---|---|:---:|
-| **Ana Silva** | Perfil Analítico / Estatístico | Ciência de Dados | `data_science` (100.0%) | ✅ **Aprovado** |
-| **Carlos Rocha** | Perfil Infraestrutura / Redes | Cibersegurança | `cybersecurity` (100.0%) | ✅ **Aprovado** |
-| **Beatriz Lima** | Perfil Criativo / UI/UX | Front-end & UI/UX | `frontend` (100.0%) | ✅ **Aprovado** |
-| **Lucas Mendes** | Perfil Negócios / Estratégia | Product Management | `pm` (100.0%) | ✅ **Aprovado** |
-| **Eduardo Santos** | Perfil Big Data / Pipelines | Engenharia de Dados | `data_engineering` (100.0%) | ✅ **Aprovado** |
-| **Mariana Costa** | Perfil Automação / Contêineres | DevOps & SRE | `devops` (100.0%) | ✅ **Aprovado** |
-| **Gabriel Alencar**| Perfil APIs / Servidor | Back-end | `backend` (83.6%) | ✅ **Aprovado** |
-| **Rafael Nogueira**| Perfil Dispositivos Móveis | Mobile | `mobile` (100.0%) | ✅ **Aprovado** |
-| **Camila Duarte** | Perfil Qualidade / Bugs | QA & Testes | `qa` (100.0%) | ✅ **Aprovado** |
-| **Rodrigo Fonseca**| Perfil Nuvem / FinOps | Cloud Architecture | `cloud` (100.0%) | ✅ **Aprovado** |
+| **Ana Silva** | Perfil Analítico / Estatístico | Ciência de Dados | `data_science` (100.0%) |  **Aprovado** |
+| **Carlos Rocha** | Perfil Infraestrutura / Redes | Cibersegurança | `cybersecurity` (100.0%) |  **Aprovado** |
+| **Beatriz Lima** | Perfil Criativo / UI/UX | Front-end & UI/UX | `frontend` (100.0%) |  **Aprovado** |
+| **Lucas Mendes** | Perfil Negócios / Estratégia | Product Management | `pm` (100.0%) |  **Aprovado** |
+| **Eduardo Santos** | Perfil Big Data / Pipelines | Engenharia de Dados | `data_engineering` (100.0%) |  **Aprovado** |
+| **Mariana Costa** | Perfil Automação / Contêineres | DevOps & SRE | `devops` (100.0%) |  **Aprovado** |
+| **Gabriel Alencar**| Perfil APIs / Servidor | Back-end | `backend` (83.6%) |  **Aprovado** |
+| **Rafael Nogueira**| Perfil Dispositivos Móveis | Mobile | `mobile` (100.0%) |  **Aprovado** |
+| **Camila Duarte** | Perfil Qualidade / Bugs | QA & Testes | `qa` (100.0%) |  **Aprovado** |
+| **Rodrigo Fonseca**| Perfil Nuvem / FinOps | Cloud Architecture | `cloud` (100.0%) |  **Aprovado** |
 
 ---
 
-## 🚀 Como Instalar e Executar
+##  Como Instalar e Executar
 
 ### 1. Pré-requisitos
 - Python versão **3.10 ou superior** instalado.
@@ -140,7 +140,7 @@ Todos os 15 testes unitários de integração, desambiguação e regras de justi
 
 ---
 
-## 📂 Estrutura do Repositório
+##  Estrutura do Repositório
 
 ```
 PythonProject/
@@ -165,12 +165,27 @@ PythonProject/
 
 ---
 
-## ⚖️ Transparência e Explicabilidade
+##  Transparência e Explicabilidade
 
 Diferente de sistemas baseados em caixas-pretas estatísticas, o Consultor Inteligente de Carreiras em TI detalha:
 1. **Regras de Ativação:** Qual regra foi disparada pelo fato declarado e a pontuação somada.
 2. **Regras Cruzadas:** A justificativa técnica que desempatou a carreira recomendada de outras trilhas similares.
 3. **Ranking Comparativo:** Índice percentual de compatibilidade com cada uma das 10 trilhas.
 4. **Roadmap de Estudos:** Próximos passos e tecnologias mandatórias para ingressar na carreira indicada.
-5.
+
+## Evidências visuais do funcionamento
+
+<img width="1364" height="682" alt="image" src="https://github.com/user-attachments/assets/f1b39471-b6fd-4c42-bb26-339dcdc959cd" />
+
+<img width="1361" height="686" alt="image" src="https://github.com/user-attachments/assets/e878bd14-673c-4bff-8972-88366730f8eb" />
+
+<img width="1364" height="680" alt="image" src="https://github.com/user-attachments/assets/f5f33b88-cf5d-4c76-b362-64e98f0d533f" />
+
+<img width="1361" height="676" alt="image" src="https://github.com/user-attachments/assets/326ecdca-ba13-4b2b-9b36-aa4d2256215f" />
+
+<img width="1356" height="678" alt="image" src="https://github.com/user-attachments/assets/320b16ed-7884-4aa5-baf2-b1c089e0626e" />
+
+
+
+
 
