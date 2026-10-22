@@ -172,5 +172,5 @@ Diferente de sistemas baseados em caixas-pretas estatísticas, o Consultor Intel
 2. **Regras Cruzadas:** A justificativa técnica que desempatou a carreira recomendada de outras trilhas similares.
 3. **Ranking Comparativo:** Índice percentual de compatibilidade com cada uma das 10 trilhas.
 4. **Roadmap de Estudos:** Próximos passos e tecnologias mandatórias para ingressar na carreira indicada.
-5. <img width="571" height="227" alt="image" src="https://github.com/user-attachments/assets/c4b6524a-174b-483d-91d8-f06c11caf75d" />
+5.
 
