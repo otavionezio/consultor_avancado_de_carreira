@@ -1,0 +1,972 @@
+{
+  "meta": {
+    "name": "Base de Conhecimento - Sistema Especialista de Carreiras em TI",
+    "version": "2.0.0",
+    "description": "Regras SE-ENTÃO, pesos, perfis de carreira, competências exigidas para o nível Júnior e recomendações de aprendizagem. Toda a regra de negócio do sistema é carregada deste arquivo."
+  },
+
+  "parameters": {
+    "scale": {
+      "min": 1,
+      "max": 5,
+      "affinity_labels": {
+        "1": "1 · Não gosto",
+        "2": "2 · Gosto pouco",
+        "3": "3 · Neutro",
+        "4": "4 · Gosto",
+        "5": "5 · Adoro"
+      },
+      "proficiency_labels": {
+        "1": "1 · Nunca estudei",
+        "2": "2 · Tenho noções",
+        "3": "3 · Já pratiquei",
+        "4": "4 · Uso com autonomia",
+        "5": "5 · Domino / ensino"
+      },
+      "unanswered_label": "Não informado"
+    },
+    "component_weights": {
+      "affinity": 0.5,
+      "preference": 0.3,
+      "proficiency": 0.2
+    },
+    "prior": {
+      "strength": 1.0,
+      "affinity": 0.5,
+      "preference": 0.5,
+      "proficiency": 0.25
+    },
+    "certainty_factor_influence": 0.35,
+    "ambiguity": {
+      "gap_threshold": 5.0,
+      "low_compatibility_threshold": 50.0,
+      "max_discriminating_affinities": 4
+    },
+    "confidence_levels": [
+      {"min": 0.7, "label": "Alta"},
+      {"min": 0.4, "label": "Média"},
+      {"min": 0.0, "label": "Baixa"}
+    ],
+    "justification": {
+      "high_affinity_min": 4,
+      "low_affinity_max": 2,
+      "relevant_weight_min": 2,
+      "strong_preference_min": 0.8,
+      "max_items": 5
+    },
+    "skill_gap": {
+      "partial_min_ratio": 0.5,
+      "external_prerequisite_level": 2,
+      "external_prerequisite_weight": 1,
+      "essential_weight": 3,
+      "dependent_bonus": 0.75,
+      "essential_bonus": 1.0,
+      "priority_thresholds": {"high": 3.5, "medium": 2.0}
+    },
+    "roadmap": {
+      "hours_per_level": 0.5,
+      "min_item_hours": 4,
+      "default_weekly_hours": 10,
+      "default_deadline_months": 6,
+      "weeks_per_month": 4.3,
+      "level_thresholds": [
+        {"min": 0.7, "id": "avancado", "label": "Pronto para vagas Júnior"},
+        {"min": 0.35, "id": "intermediario", "label": "Intermediário"},
+        {"min": 0.0, "id": "iniciante", "label": "Iniciante"}
+      ],
+      "phases": [
+        {"stage": 1, "name": "Fase 1 · Fundamentos", "description": "Base conceitual e ferramentas que sustentam todo o restante da trilha."},
+        {"stage": 2, "name": "Fase 2 · Tecnologias prioritárias", "description": "Tecnologias centrais exigidas nas vagas Júnior da carreira."},
+        {"stage": 3, "name": "Fase 3 · Aprofundamento e diferenciais", "description": "Competências complementares que diferenciam o candidato em processos seletivos."}
+      ]
+    },
+    "insights": {
+      "latent_talent": "Você tem alta afinidade com {affinity} ({value}/5), mas ainda pouca prática nas competências relacionadas ({skills}). É um ótimo ponto de partida para investir estudo.",
+      "skill_without_interest": "Você já domina {skill} ({value}/5), mas indicou baixa afinidade com {affinity}. Considere carreiras que usem essa competência como apoio, não como atividade principal."
+    }
+  },
+
+  "legacy_mappings": {
+    "math_affinity": {
+      "target": "affinities.math",
+      "values": {"Baixa": 1, "Média": 3, "Alta": 5}
+    }
+  },
+
+  "personal_profile": {
+    "objectives": [
+      {"id": "first_job", "label": "Conseguir o primeiro emprego em TI", "tip": "Priorize projetos de portfólio completos e publicados no GitHub com README claro: eles substituem a experiência formal nas primeiras entrevistas."},
+      {"id": "career_change", "label": "Migrar de outra área para TI", "tip": "Aproveite o conhecimento de domínio da sua área anterior: projetos que resolvem problemas reais dela tornam seu portfólio único."},
+      {"id": "switch_track", "label": "Mudar de trilha dentro de TI", "tip": "Você já tem base técnica: concentre o estudo nas lacunas específicas e busque projetos internos na empresa atual para ganhar experiência na nova trilha."},
+      {"id": "level_up", "label": "Crescer na trilha em que já atuo", "tip": "Foque nas competências da Fase 3 e em uma certificação reconhecida para acelerar a progressão de nível."}
+    ],
+    "experience_levels": [
+      {"id": "none", "label": "Nenhuma experiência em TI"},
+      {"id": "student", "label": "Estudante / autodidata"},
+      {"id": "junior", "label": "Até 2 anos na área"},
+      {"id": "experienced", "label": "Mais de 2 anos na área"}
+    ],
+    "experience_tips": {
+      "none": "Comece pela Fase 1 sem pular etapas: a consistência semanal importa mais do que a quantidade de horas em um único dia.",
+      "student": "Alinhe o roadmap às disciplinas do seu curso e use trabalhos acadêmicos como base para projetos de portfólio.",
+      "junior": "Você pode acelerar os fundamentos que já pratica no trabalho e dedicar mais tempo aos projetos práticos.",
+      "experienced": "Use sua experiência para assumir projetos mais ambiciosos e considere certificações de nível associado."
+    }
+  },
+
+  "affinities": {
+    "programming": {"label": "Programação", "question": "Quanto você gosta de escrever código e construir software?", "related_competencies": ["logica_programacao", "python", "javascript", "backend_typed"]},
+    "logic": {"label": "Lógica e resolução de problemas", "question": "Quanto você gosta de resolver problemas lógicos, quebra-cabeças e algoritmos?", "related_competencies": ["logica_programacao", "estruturas_dados"]},
+    "math": {"label": "Matemática e estatística", "question": "Quanto você gosta de matemática, probabilidade e estatística?", "related_competencies": ["estatistica", "algebra_calculo"]},
+    "design": {"label": "Design e experiência do usuário", "question": "Quanto você gosta de pensar em layout, estética e na experiência de quem usa um produto?", "related_competencies": ["ux_ui", "html_css", "acessibilidade"]},
+    "data_analysis": {"label": "Análise de dados", "question": "Quanto você gosta de explorar dados, encontrar padrões e gerar insights?", "related_competencies": ["sql", "pandas_numpy", "visualizacao_dados"]},
+    "infrastructure": {"label": "Infraestrutura e redes", "question": "Quanto você gosta de servidores, sistemas operacionais e redes de computadores?", "related_competencies": ["linux", "redes", "bash"]},
+    "security": {"label": "Segurança da informação", "question": "Quanto você gosta de proteger sistemas e entender como ataques funcionam?", "related_competencies": ["fundamentos_seguranca", "pentest_ferramentas"]},
+    "automation": {"label": "Automação", "question": "Quanto você gosta de automatizar tarefas repetitivas e processos?", "related_competencies": ["bash", "ci_cd", "iac_terraform"]},
+    "testing": {"label": "Testes e qualidade", "question": "Quanto você gosta de procurar falhas, validar critérios e garantir qualidade?", "related_competencies": ["fundamentos_testes", "testes_automatizados", "automacao_e2e"]},
+    "management": {"label": "Gestão e organização", "question": "Quanto você gosta de organizar trabalho, priorizar demandas e coordenar entregas?", "related_competencies": ["agil", "priorizacao_roadmap"]},
+    "communication": {"label": "Comunicação e pessoas", "question": "Quanto você gosta de conversar com pessoas, apresentar ideias e negociar?", "related_competencies": ["comunicacao_stakeholders"]},
+    "business": {"label": "Negócios e estratégia", "question": "Quanto você se interessa por estratégia de negócio, mercado e geração de receita?", "related_competencies": ["product_discovery", "metricas_produto"]},
+    "mobile_devices": {"label": "Dispositivos móveis", "question": "Quanto você se interessa por aplicativos e recursos de smartphones?", "related_competencies": ["dart_kotlin_swift", "dev_mobile"]},
+    "cloud_systems": {"label": "Nuvem e sistemas distribuídos", "question": "Quanto você se interessa por sistemas distribuídos, escalabilidade e nuvem?", "related_competencies": ["cloud_fundamentos", "arquitetura_cloud"]}
+  },
+
+  "competency_areas": [
+    "Fundamentos",
+    "Linguagens",
+    "Back-end",
+    "Front-end e Mobile",
+    "Dados",
+    "Segurança",
+    "Infraestrutura e Cloud",
+    "Qualidade",
+    "Produto e Gestão"
+  ],
+
+  "competencies": {
+    "logica_programacao": {"name": "Lógica de programação e algoritmos", "area": "Fundamentos", "stage": 1, "hours": 40, "prerequisites": [],
+      "resources": ["CS50x (Harvard, gratuito)", "Curso em Vídeo - Algoritmos (Gustavo Guanabara)", "Beecrowd / LeetCode (nível fácil)"],
+      "exercises": ["Resolver 30 exercícios de lógica (condicionais, laços e funções)", "Implementar ordenação por seleção e busca binária à mão"]},
+    "git": {"name": "Git e GitHub", "area": "Fundamentos", "stage": 1, "hours": 15, "prerequisites": [],
+      "resources": ["Pro Git (livro gratuito, git-scm.com)", "GitHub Skills (cursos interativos)"],
+      "exercises": ["Versionar um projeto com branches, pull requests e resolução de conflito", "Escrever um README completo para um repositório"]},
+    "linux": {"name": "Linux e linha de comando", "area": "Fundamentos", "stage": 1, "hours": 25, "prerequisites": [],
+      "resources": ["Linux Journey (gratuito)", "The Linux Command Line (William Shotts)"],
+      "exercises": ["Configurar uma VM ou WSL e administrar usuários, permissões e processos", "Navegar e manipular arquivos apenas pelo terminal durante uma semana"]},
+    "redes": {"name": "Redes de computadores (TCP/IP, DNS, HTTP)", "area": "Fundamentos", "stage": 1, "hours": 35, "prerequisites": [],
+      "resources": ["Cisco Networking Academy - Introdução a Redes", "Computer Networking: A Top-Down Approach (Kurose)"],
+      "exercises": ["Calcular sub-redes e montar uma topologia no Packet Tracer", "Analisar uma requisição HTTP completa com o Wireshark"]},
+    "estruturas_dados": {"name": "Estruturas de dados", "area": "Fundamentos", "stage": 1, "hours": 30, "prerequisites": ["logica_programacao"],
+      "resources": ["Grokking Algorithms (Aditya Bhargava)", "NeetCode - roadmap de estruturas"],
+      "exercises": ["Implementar pilha, fila, lista ligada e tabela hash", "Resolver 15 problemas usando dicionários e árvores"]},
+    "poo": {"name": "Programação orientada a objetos", "area": "Fundamentos", "stage": 1, "hours": 25, "prerequisites": ["logica_programacao"],
+      "resources": ["Refactoring.Guru - padrões e princípios SOLID", "Documentação oficial da linguagem escolhida (seção de classes)"],
+      "exercises": ["Modelar um sistema de biblioteca com classes, herança e composição", "Refatorar um código procedural aplicando SOLID"]},
+    "estatistica": {"name": "Estatística e probabilidade", "area": "Fundamentos", "stage": 1, "hours": 50, "prerequisites": [],
+      "resources": ["Khan Academy - Estatística e Probabilidade", "Estatística Prática para Cientistas de Dados (Bruce & Bruce)"],
+      "exercises": ["Calcular medidas descritivas e intervalos de confiança em um dataset real", "Executar um teste de hipótese A/B e interpretar o p-valor"]},
+    "algebra_calculo": {"name": "Álgebra linear e cálculo para ML", "area": "Fundamentos", "stage": 1, "hours": 40, "prerequisites": [],
+      "resources": ["3Blue1Brown - Essence of Linear Algebra", "Mathematics for Machine Learning (Deisenroth et al.)"],
+      "exercises": ["Implementar multiplicação de matrizes e gradiente descendente com NumPy", "Derivar a função de custo de uma regressão linear"]},
+    "fundamentos_sdlc": {"name": "Ciclo de vida de desenvolvimento de software", "area": "Fundamentos", "stage": 1, "hours": 20, "prerequisites": [],
+      "resources": ["Engenharia de Software Moderna (Marco Tulio Valente, gratuito)", "Atlassian Agile Coach"],
+      "exercises": ["Mapear as etapas de entrega de uma funcionalidade, do requisito ao deploy", "Acompanhar um projeto open source e descrever seu fluxo de contribuição"]},
+
+    "python": {"name": "Python", "area": "Linguagens", "stage": 1, "hours": 40, "prerequisites": ["logica_programacao"],
+      "resources": ["Documentação oficial e tutorial do Python", "Python Crash Course (Eric Matthes)", "Exercism - trilha Python"],
+      "exercises": ["Construir 5 scripts utilitários (arquivos, APIs, CSV)", "Resolver a trilha de Python do Exercism até o nível intermediário"]},
+    "javascript": {"name": "JavaScript", "area": "Linguagens", "stage": 1, "hours": 40, "prerequisites": ["logica_programacao"],
+      "resources": ["MDN Web Docs - JavaScript", "javascript.info", "Eloquent JavaScript (Marijn Haverbeke)"],
+      "exercises": ["Manipular o DOM criando uma lista de tarefas interativa", "Consumir uma API pública com fetch e async/await"]},
+    "typescript": {"name": "TypeScript", "area": "Linguagens", "stage": 2, "hours": 20, "prerequisites": ["javascript"],
+      "resources": ["TypeScript Handbook (documentação oficial)", "Type Challenges (GitHub)"],
+      "exercises": ["Migrar um projeto JavaScript para TypeScript estrito", "Tipar respostas de API com interfaces e generics"]},
+    "backend_typed": {"name": "Java, C# ou Go", "area": "Linguagens", "stage": 1, "hours": 50, "prerequisites": ["logica_programacao"],
+      "resources": ["Documentação oficial (dev.java, learn.microsoft.com/dotnet ou go.dev/tour)", "Exercism - trilha da linguagem escolhida"],
+      "exercises": ["Implementar um CRUD em memória com testes unitários", "Resolver 20 exercícios da trilha Exercism da linguagem"]},
+    "html_css": {"name": "HTML semântico e CSS", "area": "Linguagens", "stage": 1, "hours": 30, "prerequisites": [],
+      "resources": ["MDN Web Docs - HTML e CSS", "Flexbox Froggy e Grid Garden", "Frontend Mentor (desafios)"],
+      "exercises": ["Reproduzir 3 layouts do Frontend Mentor com Flexbox e Grid", "Construir uma landing page responsiva sem frameworks"]},
+    "dart_kotlin_swift": {"name": "Dart, Kotlin ou Swift", "area": "Linguagens", "stage": 1, "hours": 40, "prerequisites": ["logica_programacao"],
+      "resources": ["dart.dev / kotlinlang.org / swift.org (tutoriais oficiais)", "Exercism - trilha da linguagem escolhida"],
+      "exercises": ["Resolver 20 exercícios da linguagem", "Implementar um modelo de dados com classes e coleções"]},
+    "bash": {"name": "Shell script (Bash)", "area": "Linguagens", "stage": 2, "hours": 20, "prerequisites": ["linux"],
+      "resources": ["Bash Guide for Beginners (TLDP)", "ShellCheck (análise de scripts)"],
+      "exercises": ["Escrever um script de backup com rotação de arquivos", "Automatizar a análise de logs com grep, awk e sed"]},
+
+    "apis_rest": {"name": "APIs REST e HTTP", "area": "Back-end", "stage": 2, "hours": 30, "prerequisites": ["logica_programacao", "redes"],
+      "resources": ["Documentação do FastAPI, Spring Boot ou Express", "RESTful Web API Patterns (O'Reilly)"],
+      "exercises": ["Construir uma API CRUD com validação e códigos HTTP corretos", "Documentar a API com OpenAPI/Swagger"]},
+    "sql": {"name": "SQL e bancos de dados relacionais", "area": "Back-end", "stage": 1, "hours": 35, "prerequisites": [],
+      "resources": ["SQLBolt (interativo)", "Mode SQL Tutorial", "Documentação do PostgreSQL"],
+      "exercises": ["Modelar e consultar um banco de vendas com JOINs e agregações", "Resolver 30 desafios SQL no HackerRank"]},
+    "orm_modelagem": {"name": "Modelagem de dados e ORMs", "area": "Back-end", "stage": 2, "hours": 25, "prerequisites": ["sql"],
+      "resources": ["Documentação do SQLAlchemy, Hibernate ou Prisma", "Database Design for Mere Mortals"],
+      "exercises": ["Normalizar um modelo até a 3FN", "Implementar migrações e relacionamentos 1:N e N:N com ORM"]},
+    "autenticacao_seguranca_app": {"name": "Autenticação e segurança de aplicações (OWASP)", "area": "Segurança", "stage": 3, "hours": 25, "prerequisites": ["apis_rest"],
+      "resources": ["OWASP Top 10", "OWASP Cheat Sheet Series", "PortSwigger Web Security Academy"],
+      "exercises": ["Implementar login com JWT, refresh token e hashing de senhas", "Corrigir vulnerabilidades de injeção em uma aplicação de exemplo"]},
+    "arquitetura_software": {"name": "Padrões de projeto e arquitetura de software", "area": "Back-end", "stage": 3, "hours": 30, "prerequisites": ["poo"],
+      "resources": ["Refactoring.Guru - Design Patterns", "Clean Architecture (Robert C. Martin)"],
+      "exercises": ["Separar uma API em camadas (domínio, aplicação e infraestrutura)", "Aplicar Repository e Strategy em um projeto existente"]},
+    "mensageria_cache": {"name": "Mensageria e cache (RabbitMQ, Kafka, Redis)", "area": "Back-end", "stage": 3, "hours": 20, "prerequisites": ["apis_rest"],
+      "resources": ["Tutoriais oficiais do RabbitMQ", "Redis University (gratuito)"],
+      "exercises": ["Processar tarefas assíncronas com uma fila", "Adicionar cache com expiração a um endpoint lento"]},
+
+    "react": {"name": "Framework front-end (React, Vue ou Angular)", "area": "Front-end e Mobile", "stage": 2, "hours": 45, "prerequisites": ["javascript", "html_css"],
+      "resources": ["react.dev (documentação oficial)", "Vue.js Guide", "Full Stack Open (Universidade de Helsinque)"],
+      "exercises": ["Construir uma SPA com rotas, formulários e estado global", "Consumir uma API REST com tratamento de carregamento e erro"]},
+    "ux_ui": {"name": "Fundamentos de UX/UI e Figma", "area": "Front-end e Mobile", "stage": 2, "hours": 30, "prerequisites": [],
+      "resources": ["Google UX Design Certificate (Coursera)", "Laws of UX (lawsofux.com)", "Figma Learn"],
+      "exercises": ["Prototipar no Figma o fluxo de cadastro de um app", "Aplicar as 10 heurísticas de Nielsen em uma análise de site real"]},
+    "acessibilidade": {"name": "Acessibilidade web (WCAG)", "area": "Front-end e Mobile", "stage": 3, "hours": 15, "prerequisites": ["html_css"],
+      "resources": ["WCAG 2.2 Quick Reference (W3C)", "web.dev - Learn Accessibility"],
+      "exercises": ["Auditar uma página com Lighthouse e axe e corrigir os problemas", "Navegar e ajustar uma aplicação usando apenas teclado e leitor de tela"]},
+    "dev_mobile": {"name": "Desenvolvimento de apps (Flutter, React Native ou nativo)", "area": "Front-end e Mobile", "stage": 2, "hours": 50, "prerequisites": ["logica_programacao", ["dart_kotlin_swift", "javascript"]],
+      "resources": ["Documentação do Flutter (flutter.dev)", "React Native Docs", "Android Basics with Compose (Google)"],
+      "exercises": ["Construir um app com navegação, lista e tela de detalhes", "Persistir dados localmente e sincronizar com uma API"]},
+    "publicacao_lojas": {"name": "Publicação nas lojas e CI/CD mobile", "area": "Front-end e Mobile", "stage": 3, "hours": 10, "prerequisites": ["dev_mobile"],
+      "resources": ["Google Play Console Help", "Fastlane Docs"],
+      "exercises": ["Gerar build assinado e publicar em trilha de testes interna", "Automatizar o build com Fastlane ou Codemagic"]},
+
+    "pandas_numpy": {"name": "Manipulação de dados (Pandas e NumPy)", "area": "Dados", "stage": 2, "hours": 30, "prerequisites": ["python"],
+      "resources": ["Python for Data Analysis (Wes McKinney)", "Kaggle Learn - Pandas"],
+      "exercises": ["Limpar e transformar um dataset público com valores ausentes", "Responder 10 perguntas de negócio com groupby e merge"]},
+    "visualizacao_dados": {"name": "Visualização e storytelling com dados", "area": "Dados", "stage": 2, "hours": 20, "prerequisites": ["pandas_numpy"],
+      "resources": ["Storytelling com Dados (Cole Nussbaumer)", "Documentação do Matplotlib, Seaborn e Altair"],
+      "exercises": ["Criar um dashboard exploratório com 5 gráficos complementares", "Apresentar uma análise em 5 minutos para um público não técnico"]},
+    "machine_learning": {"name": "Machine Learning clássico (Scikit-Learn)", "area": "Dados", "stage": 2, "hours": 60, "prerequisites": ["pandas_numpy", "estatistica"],
+      "resources": ["Mãos à Obra: Aprendizado de Máquina (Aurélien Géron)", "Kaggle Learn - Intro to ML", "Curso de ML de Andrew Ng (Coursera)"],
+      "exercises": ["Treinar e comparar 3 modelos de classificação com validação cruzada", "Participar de uma competição introdutória do Kaggle"]},
+    "deep_learning": {"name": "Deep Learning (PyTorch ou TensorFlow)", "area": "Dados", "stage": 3, "hours": 50, "prerequisites": ["machine_learning", "algebra_calculo"],
+      "resources": ["fast.ai - Practical Deep Learning", "Dive into Deep Learning (d2l.ai)"],
+      "exercises": ["Treinar uma rede neural para classificação de imagens", "Fazer fine-tuning de um modelo pré-treinado do Hugging Face"]},
+    "etl_pipelines": {"name": "Pipelines ETL/ELT e orquestração (Airflow)", "area": "Dados", "stage": 2, "hours": 40, "prerequisites": ["python", "sql"],
+      "resources": ["Documentação do Apache Airflow", "Data Engineering Zoomcamp (DataTalksClub, gratuito)"],
+      "exercises": ["Construir um pipeline que extrai de uma API, transforma e carrega no PostgreSQL", "Agendar o pipeline com Airflow e tratar falhas com retries"]},
+    "spark": {"name": "Processamento distribuído (Spark)", "area": "Dados", "stage": 3, "hours": 40, "prerequisites": ["etl_pipelines"],
+      "resources": ["Learning Spark (O'Reilly)", "Databricks Academy (cursos gratuitos)"],
+      "exercises": ["Processar um dataset de milhões de linhas com PySpark", "Comparar o desempenho de particionamentos diferentes"]},
+    "modelagem_dimensional": {"name": "Data Warehouse e modelagem dimensional", "area": "Dados", "stage": 2, "hours": 25, "prerequisites": ["sql"],
+      "resources": ["The Data Warehouse Toolkit (Kimball)", "Documentação do dbt"],
+      "exercises": ["Modelar um esquema estrela para dados de vendas", "Criar modelos incrementais com dbt"]},
+
+    "fundamentos_seguranca": {"name": "Fundamentos de segurança da informação", "area": "Segurança", "stage": 1, "hours": 30, "prerequisites": ["redes"],
+      "resources": ["Google Cybersecurity Certificate (Coursera)", "Professor Messer - Security+ (vídeos gratuitos)"],
+      "exercises": ["Classificar ameaças de um cenário fictício pela tríade CIA", "Configurar criptografia de disco e autenticação em dois fatores em um laboratório"]},
+    "pentest_ferramentas": {"name": "Análise de vulnerabilidades (Nmap, Wireshark, Burp)", "area": "Segurança", "stage": 2, "hours": 40, "prerequisites": ["fundamentos_seguranca", "linux"],
+      "resources": ["TryHackMe - Pre Security e Jr Penetration Tester", "PortSwigger Web Security Academy", "OverTheWire - Bandit"],
+      "exercises": ["Concluir 10 salas do TryHackMe documentando cada etapa", "Escrever um relatório de vulnerabilidades de uma máquina vulnerável de laboratório"]},
+    "resposta_incidentes": {"name": "Monitoramento, SIEM e resposta a incidentes", "area": "Segurança", "stage": 3, "hours": 30, "prerequisites": ["fundamentos_seguranca"],
+      "resources": ["Blue Team Labs Online", "Elastic Security - documentação e laboratórios", "NIST SP 800-61 (guia de resposta a incidentes)"],
+      "exercises": ["Montar um SIEM caseiro com Wazuh ou Elastic e criar alertas", "Investigar logs de um incidente simulado e escrever o relatório"]},
+
+    "docker": {"name": "Contêineres com Docker", "area": "Infraestrutura e Cloud", "stage": 2, "hours": 25, "prerequisites": ["linux"],
+      "resources": ["Docker Docs - Get Started", "Play with Docker"],
+      "exercises": ["Containerizar uma aplicação com Dockerfile multi-stage", "Orquestrar app e banco com Docker Compose"]},
+    "ci_cd": {"name": "Integração e entrega contínua (CI/CD)", "area": "Infraestrutura e Cloud", "stage": 2, "hours": 25, "prerequisites": ["git"],
+      "resources": ["GitHub Actions Docs", "GitLab CI/CD Docs"],
+      "exercises": ["Criar um pipeline que roda testes e lint a cada pull request", "Publicar uma imagem Docker automaticamente a cada tag"]},
+    "kubernetes": {"name": "Orquestração com Kubernetes", "area": "Infraestrutura e Cloud", "stage": 3, "hours": 40, "prerequisites": ["docker"],
+      "resources": ["Kubernetes Docs - Tutorials", "Kubernetes the Hard Way (Kelsey Hightower)", "Killercoda (laboratórios)"],
+      "exercises": ["Subir um cluster local com kind e implantar uma app com Deployment e Service", "Configurar Ingress, ConfigMap e autoescalonamento"]},
+    "iac_terraform": {"name": "Infraestrutura como Código (Terraform)", "area": "Infraestrutura e Cloud", "stage": 3, "hours": 30, "prerequisites": ["cloud_fundamentos"],
+      "resources": ["HashiCorp Developer - Terraform Tutorials", "Terraform: Up & Running (Yevgeniy Brikman)"],
+      "exercises": ["Provisionar uma rede e uma VM com Terraform", "Organizar o código em módulos reutilizáveis com estado remoto"]},
+    "observabilidade": {"name": "Observabilidade (Prometheus, Grafana, logs)", "area": "Infraestrutura e Cloud", "stage": 3, "hours": 25, "prerequisites": ["linux"],
+      "resources": ["Prometheus Docs", "Grafana Tutorials", "Site Reliability Engineering (Google, gratuito)"],
+      "exercises": ["Instrumentar uma API com métricas e criar um dashboard no Grafana", "Definir SLOs e alertas para um serviço"]},
+    "cloud_fundamentos": {"name": "Fundamentos de cloud (AWS, Azure ou GCP)", "area": "Infraestrutura e Cloud", "stage": 2, "hours": 35, "prerequisites": ["redes"],
+      "resources": ["AWS Skill Builder - Cloud Practitioner Essentials", "Microsoft Learn - AZ-900", "Google Cloud Skills Boost"],
+      "exercises": ["Hospedar um site estático com armazenamento de objetos e CDN", "Criar uma VM, configurar grupo de segurança e acesso SSH"]},
+    "arquitetura_cloud": {"name": "Arquitetura de soluções em nuvem", "area": "Infraestrutura e Cloud", "stage": 3, "hours": 45, "prerequisites": ["cloud_fundamentos"],
+      "resources": ["AWS Well-Architected Framework", "Azure Architecture Center", "Fundamentals of Software Architecture (Richards & Ford)"],
+      "exercises": ["Desenhar uma arquitetura de alta disponibilidade multi-AZ e estimar custos", "Migrar uma aplicação monolítica para serviços gerenciados"]},
+    "iam_seguranca_cloud": {"name": "IAM e segurança em nuvem", "area": "Infraestrutura e Cloud", "stage": 3, "hours": 20, "prerequisites": ["cloud_fundamentos"],
+      "resources": ["AWS IAM User Guide", "Microsoft Learn - Entra ID"],
+      "exercises": ["Implementar o princípio do menor privilégio com políticas e papéis", "Auditar uma conta de laboratório com ferramentas nativas de postura de segurança"]},
+
+    "fundamentos_testes": {"name": "Fundamentos de testes de software (ISTQB)", "area": "Qualidade", "stage": 1, "hours": 25, "prerequisites": [],
+      "resources": ["Syllabus ISTQB CTFL (gratuito)", "Lessons Learned in Software Testing (Kaner et al.)"],
+      "exercises": ["Escrever casos de teste com particionamento de equivalência e valor limite", "Reportar 5 bugs reais de um site com passos de reprodução claros"]},
+    "testes_automatizados": {"name": "Testes unitários e de integração", "area": "Qualidade", "stage": 2, "hours": 25, "prerequisites": ["logica_programacao"],
+      "resources": ["Documentação do PyTest, JUnit ou Jest", "Test-Driven Development (Kent Beck)"],
+      "exercises": ["Atingir 80% de cobertura em um projeto existente", "Desenvolver uma funcionalidade pequena usando TDD"]},
+    "automacao_e2e": {"name": "Automação E2E (Playwright ou Cypress)", "area": "Qualidade", "stage": 2, "hours": 30, "prerequisites": ["fundamentos_testes", "logica_programacao"],
+      "resources": ["Playwright Docs", "Cypress Docs", "Test Automation University (gratuito)"],
+      "exercises": ["Automatizar o fluxo de login e compra de uma loja de demonstração", "Aplicar Page Object Model e rodar os testes em paralelo"]},
+    "testes_api_carga": {"name": "Testes de API e de carga (Postman, k6)", "area": "Qualidade", "stage": 3, "hours": 25, "prerequisites": ["fundamentos_testes"],
+      "resources": ["Postman Learning Center", "k6 Docs"],
+      "exercises": ["Criar uma coleção de testes de contrato para uma API pública", "Executar um teste de carga e analisar latência p95"]},
+
+    "agil": {"name": "Metodologias ágeis (Scrum e Kanban)", "area": "Produto e Gestão", "stage": 1, "hours": 15, "prerequisites": [],
+      "resources": ["Guia do Scrum (scrumguides.org)", "Kanban: Successful Evolutionary Change (David Anderson)"],
+      "exercises": ["Organizar um projeto pessoal em sprints com quadro Kanban", "Facilitar uma retrospectiva com amigos ou colegas"]},
+    "product_discovery": {"name": "Product Discovery e pesquisa com usuários", "area": "Produto e Gestão", "stage": 2, "hours": 30, "prerequisites": [],
+      "resources": ["Inspired (Marty Cagan)", "Continuous Discovery Habits (Teresa Torres)", "The Mom Test (Rob Fitzpatrick)"],
+      "exercises": ["Conduzir 5 entrevistas com usuários e sintetizar as dores encontradas", "Construir uma árvore de oportunidades para um produto real"]},
+    "priorizacao_roadmap": {"name": "Priorização, OKRs e roadmap", "area": "Produto e Gestão", "stage": 2, "hours": 20, "prerequisites": ["agil"],
+      "resources": ["Intercom on Product Management (RICE)", "Measure What Matters (John Doerr)"],
+      "exercises": ["Priorizar um backlog de 15 itens com RICE", "Escrever OKRs trimestrais para um produto fictício"]},
+    "metricas_produto": {"name": "Métricas de produto e analytics", "area": "Produto e Gestão", "stage": 2, "hours": 25, "prerequisites": [],
+      "resources": ["Lean Analytics (Croll & Yoskovitz)", "Amplitude Academy"],
+      "exercises": ["Definir a métrica North Star e o funil de um app conhecido", "Analisar cohort de retenção em uma planilha ou SQL"]},
+    "comunicacao_stakeholders": {"name": "Comunicação e gestão de stakeholders", "area": "Produto e Gestão", "stage": 3, "hours": 20, "prerequisites": [],
+      "resources": ["Comunicação Não-Violenta (Marshall Rosenberg)", "Crucial Conversations (Patterson et al.)"],
+      "exercises": ["Apresentar uma proposta de produto em 5 minutos com problema, solução e métricas", "Mapear stakeholders de um projeto em matriz de poder x interesse"]}
+  },
+
+  "choice_questions": [
+    {
+      "id": "work_preference",
+      "label": "Atuação diária preferida",
+      "question": "Qual dessas atividades práticas mais te motiva no dia a dia?",
+      "options": [
+        {"value": "Lógica de negócios, APIs e bancos de dados", "weights": {"backend": 1.0, "data_engineering": 0.2}},
+        {"value": "Interfaces visuais interativas, design e experiência do usuário", "weights": {"frontend": 1.0, "mobile": 0.4, "pm": 0.1}},
+        {"value": "Modelagem estatística, machine learning e inteligência artificial", "weights": {"data_science": 1.0, "data_engineering": 0.3}},
+        {"value": "Pipelines de dados, arquitetura ETL/ELT e Data Lakes", "weights": {"data_engineering": 1.0, "data_science": 0.3, "backend": 0.2}},
+        {"value": "Defesa cibernética, análise de vulnerabilidades e testes de invasão", "weights": {"cybersecurity": 1.0, "devops": 0.2}},
+        {"value": "Automação de CI/CD, esteiras de deploy, contêineres e alta disponibilidade", "weights": {"devops": 1.0, "cloud": 0.5}},
+        {"value": "Arquitetura de sistemas em nuvem, migração e infraestrutura escalável", "weights": {"cloud": 1.0, "devops": 0.5}},
+        {"value": "Aplicativos móveis nativos ou multiplataforma para smartphones", "weights": {"mobile": 1.0, "frontend": 0.4}},
+        {"value": "Testes automatizados, caça a bugs e garantia de qualidade", "weights": {"qa": 1.0, "backend": 0.1}},
+        {"value": "Gestão de produto, estratégia de negócio, priorização e comunicação", "weights": {"pm": 1.0}}
+      ]
+    },
+    {
+      "id": "primary_tool",
+      "label": "Ecossistema de maior afinidade",
+      "question": "Qual ecossistema ou conjunto de ferramentas você mais domina ou prefere aprender?",
+      "options": [
+        {"value": "Python", "weights": {"data_science": 0.6, "backend": 0.5, "data_engineering": 0.5, "qa": 0.3, "devops": 0.2, "cybersecurity": 0.2}},
+        {"value": "JavaScript / TypeScript", "weights": {"frontend": 0.8, "mobile": 0.4, "backend": 0.3, "qa": 0.3}},
+        {"value": "Java / C# / Go", "weights": {"backend": 0.9, "cloud": 0.2, "mobile": 0.2, "devops": 0.2}},
+        {"value": "SQL / Ferramentas de Big Data (Spark, Airflow)", "weights": {"data_engineering": 0.9, "data_science": 0.4, "backend": 0.3}},
+        {"value": "Swift / Kotlin / Flutter / React Native", "weights": {"mobile": 1.0, "frontend": 0.2}},
+        {"value": "Linux / Bash / Ferramentas de Redes e Segurança", "weights": {"cybersecurity": 0.9, "devops": 0.5, "cloud": 0.2}},
+        {"value": "Docker / Kubernetes / Terraform / CI-CD", "weights": {"devops": 0.9, "cloud": 0.5}},
+        {"value": "Nuvem AWS / Azure / GCP", "weights": {"cloud": 0.9, "devops": 0.5, "data_engineering": 0.2}},
+        {"value": "Ferramentas de Teste (Cypress, Selenium, PyTest, JUnit)", "weights": {"qa": 1.0}},
+        {"value": "Ferramentas de Gestão e Ágil (Jira, Trello, Miro, Notion)", "weights": {"pm": 1.0, "qa": 0.1}},
+        {"value": "Nenhuma / Iniciante", "neutral": true, "weights": {}}
+      ]
+    },
+    {
+      "id": "value_delivery",
+      "label": "Entrega de valor preferida",
+      "question": "Ao término de uma sprint, o que te dá mais orgulho de ter entregue?",
+      "options": [
+        {"value": "APIs robustas, regras de negócio e estabilidade de servidor", "weights": {"backend": 1.0, "devops": 0.2}},
+        {"value": "Telas encantadoras, responsivas e navegação agradável", "weights": {"frontend": 1.0, "mobile": 0.4}},
+        {"value": "Modelos preditivos acurados e inteligência artificial para decisão", "weights": {"data_science": 1.0, "data_engineering": 0.2}},
+        {"value": "Fluxo de dados limpo, rápido e confiável para toda a empresa", "weights": {"data_engineering": 1.0, "data_science": 0.2, "backend": 0.2}},
+        {"value": "Proteção contra invasões, dados seguros e sistemas blindados", "weights": {"cybersecurity": 1.0, "cloud": 0.2}},
+        {"value": "Deploys frequentes sem quedas e esteiras ágeis automatizadas", "weights": {"devops": 1.0, "cloud": 0.3}},
+        {"value": "Estrutura de nuvem escalável, resiliente e com custos otimizados", "weights": {"cloud": 1.0, "devops": 0.3}},
+        {"value": "Experiência móvel fluida e acessível na palma da mão", "weights": {"mobile": 1.0, "frontend": 0.3}},
+        {"value": "Software sem bugs, estável e que cumpre todos os critérios", "weights": {"qa": 1.0, "backend": 0.2}},
+        {"value": "Produtos que resolvem dores de usuários e geram receita", "weights": {"pm": 1.0, "frontend": 0.1}}
+      ]
+    },
+    {
+      "id": "daily_challenge",
+      "label": "Desafio que mais instiga",
+      "question": "Que tipo de problema complexo te mantém engajado?",
+      "options": [
+        {"value": "Otimizar algoritmos e consultas SQL complexas", "weights": {"backend": 1.0, "data_engineering": 0.3}},
+        {"value": "Ajustar CSS, microinterações e acessibilidade web", "weights": {"frontend": 1.0}},
+        {"value": "Calibrar hiperparâmetros e testar hipóteses estatísticas", "weights": {"data_science": 1.0}},
+        {"value": "Escalar pipelines de processamento distribuído de terabytes", "weights": {"data_engineering": 1.0, "cloud": 0.2}},
+        {"value": "Simular ataques, encontrar brechas zero-day e auditar logs", "weights": {"cybersecurity": 1.0}},
+        {"value": "Resolver gargalos em contêineres e orquestrar clusters K8s", "weights": {"devops": 1.0, "cloud": 0.3}},
+        {"value": "Desenhar diagramas de nuvem e arquitetar alta disponibilidade", "weights": {"cloud": 1.0, "devops": 0.3}},
+        {"value": "Gerenciar ciclo de vida de apps e permissões de hardware móvel", "weights": {"mobile": 1.0}},
+        {"value": "Automatizar suítes de testes de regressão e carga", "weights": {"qa": 1.0, "devops": 0.1}},
+        {"value": "Negociar com stakeholders e definir o roadmap do produto", "weights": {"pm": 1.0}}
+      ]
+    },
+    {
+      "id": "communication_vs_code",
+      "label": "Equilíbrio entre código e pessoas",
+      "question": "Qual estilo de trabalho predomina no seu dia ideal?",
+      "options": [
+        {"value": "Foco predominante em código e arquitetura técnica profunda", "weights": {"backend": 0.8, "data_engineering": 0.8, "devops": 0.8, "cybersecurity": 0.8, "data_science": 0.7, "mobile": 0.7, "cloud": 0.6, "frontend": 0.6, "qa": 0.6, "pm": 0.1}},
+        {"value": "Foco balanceado entre desenvolvimento técnico e colaboração", "weights": {"backend": 0.6, "frontend": 0.6, "data_science": 0.6, "data_engineering": 0.6, "cybersecurity": 0.6, "devops": 0.6, "cloud": 0.6, "mobile": 0.6, "qa": 0.6, "pm": 0.5}},
+        {"value": "Foco predominante em pessoas, alinhamento de negócio e facilitação", "weights": {"pm": 1.0, "qa": 0.4, "frontend": 0.3, "cloud": 0.3, "data_science": 0.3, "backend": 0.15, "data_engineering": 0.15, "cybersecurity": 0.15, "devops": 0.15, "mobile": 0.15}}
+      ]
+    },
+    {
+      "id": "device_focus",
+      "label": "Ambiente de execução de maior interesse",
+      "question": "Em que tipo de ambiente você prefere que seu trabalho rode?",
+      "options": [
+        {"value": "Agnóstico a hardware, foco total em software/lógica/regras", "weights": {"backend": 0.8, "data_science": 0.8, "frontend": 0.7, "data_engineering": 0.7, "qa": 0.6, "pm": 0.6, "cybersecurity": 0.3, "devops": 0.3, "cloud": 0.3, "mobile": 0.1}},
+        {"value": "Dispositivos móveis, smartphones e tablets", "weights": {"mobile": 1.0, "frontend": 0.3, "qa": 0.3}},
+        {"value": "Redes, roteadores, firewalls e servidores físicos", "weights": {"cybersecurity": 1.0, "devops": 0.6, "cloud": 0.5}},
+        {"value": "Serviços virtuais gerenciados e data centers na nuvem", "weights": {"cloud": 1.0, "devops": 0.8, "data_engineering": 0.6, "backend": 0.3}}
+      ]
+    }
+  ],
+
+  "rules": [
+    {"id": "T01", "category": "derivacao", "name": "Traço: perfil analítico",
+      "if": {"all": [{"fact": "affinities.math", "op": ">=", "value": 4}, {"fact": "affinities.data_analysis", "op": ">=", "value": 4}]},
+      "then": {"infer": {"traits.analytical": true}},
+      "explanation": "Alta afinidade simultânea com matemática e análise de dados caracteriza um perfil analítico."},
+    {"id": "T02", "category": "derivacao", "name": "Traço: perfil de infraestrutura",
+      "if": {"all": [{"fact": "affinities.infrastructure", "op": ">=", "value": 4}, {"any": [{"fact": "affinities.automation", "op": ">=", "value": 4}, {"fact": "affinities.cloud_systems", "op": ">=", "value": 4}]}]},
+      "then": {"infer": {"traits.infrastructure": true}},
+      "explanation": "Gosto por infraestrutura combinado com automação ou nuvem caracteriza um perfil de operações."},
+    {"id": "T03", "category": "derivacao", "name": "Traço: perfil visual-técnico",
+      "if": {"all": [{"fact": "affinities.design", "op": ">=", "value": 4}, {"fact": "affinities.programming", "op": ">=", "value": 3}]},
+      "then": {"infer": {"traits.visual_builder": true}},
+      "explanation": "Afinidade com design aliada ao gosto por programação indica quem gosta de construir interfaces."},
+    {"id": "T04", "category": "derivacao", "name": "Traço: perfil de negócios",
+      "if": {"all": [{"fact": "affinities.communication", "op": ">=", "value": 4}, {"any": [{"fact": "affinities.management", "op": ">=", "value": 4}, {"fact": "affinities.business", "op": ">=", "value": 4}]}]},
+      "then": {"infer": {"traits.business": true}},
+      "explanation": "Comunicação forte somada a gestão ou visão de negócio caracteriza um perfil de produto."},
+    {"id": "T05", "category": "derivacao", "name": "Traço: baixo interesse em codificação",
+      "if": {"all": [{"fact": "affinities.programming", "op": "<=", "value": 2}, {"fact": "affinities.logic", "op": "<=", "value": 3}]},
+      "then": {"infer": {"traits.low_coding_interest": true}},
+      "explanation": "Pouco gosto por programação e lógica indica preferência por atividades menos centradas em código."},
+    {"id": "T06", "category": "derivacao", "name": "Traço: foco em pessoas",
+      "if": {"fact": "choices.communication_vs_code", "op": "==", "value": "Foco predominante em pessoas, alinhamento de negócio e facilitação"},
+      "then": {"infer": {"traits.people_focus": true}},
+      "explanation": "Preferência declarada por trabalho com pessoas e alinhamento de negócio."},
+    {"id": "T07", "category": "derivacao", "name": "Traço: foco técnico profundo",
+      "if": {"fact": "choices.communication_vs_code", "op": "==", "value": "Foco predominante em código e arquitetura técnica profunda"},
+      "then": {"infer": {"traits.deep_technical": true}},
+      "explanation": "Preferência declarada por trabalho técnico profundo."},
+    {"id": "T08", "category": "derivacao", "name": "Traço: perfil de qualidade",
+      "if": {"all": [{"fact": "affinities.testing", "op": ">=", "value": 4}, {"any": [{"fact": "affinities.logic", "op": ">=", "value": 4}, {"fact": "affinities.automation", "op": ">=", "value": 3}]}]},
+      "then": {"infer": {"traits.quality_minded": true}},
+      "explanation": "Gosto por testes combinado com lógica ou automação caracteriza o perfil de engenharia de qualidade."},
+
+    {"id": "R01", "category": "evidencia", "name": "Perfil analítico favorece Ciência de Dados",
+      "if": {"fact": "traits.analytical", "op": "==", "value": true},
+      "then": {"evidence": {"data_science": 0.5, "data_engineering": 0.15}},
+      "explanation": "Cientistas de Dados usam estatística e exploração de dados diariamente."},
+    {"id": "R02", "category": "evidencia", "name": "Perfil de infraestrutura favorece Operações",
+      "if": {"fact": "traits.infrastructure", "op": "==", "value": true},
+      "then": {"evidence": {"devops": 0.35, "cloud": 0.35, "cybersecurity": 0.15}},
+      "explanation": "DevOps e Cloud lidam com servidores, redes e automação de ambientes."},
+    {"id": "R03", "category": "evidencia", "name": "Perfil visual-técnico favorece interfaces",
+      "if": {"fact": "traits.visual_builder", "op": "==", "value": true},
+      "then": {"evidence": {"frontend": 0.45, "mobile": 0.25}},
+      "explanation": "Construir interfaces exige ao mesmo tempo senso visual e programação."},
+    {"id": "R04", "category": "evidencia", "name": "Perfil de negócios favorece Produto",
+      "if": {"fact": "traits.business", "op": "==", "value": true},
+      "then": {"evidence": {"pm": 0.5}},
+      "explanation": "Product Managers conectam clientes, negócio e engenharia."},
+    {"id": "R05", "category": "evidencia", "name": "Baixo interesse em código",
+      "if": {"fact": "traits.low_coding_interest", "op": "==", "value": true},
+      "then": {"evidence": {"pm": 0.3, "backend": -0.4, "frontend": -0.3, "mobile": -0.3, "data_engineering": -0.3, "devops": -0.2}},
+      "explanation": "Carreiras de desenvolvimento exigem programação diária; gestão de produto exige menos código."},
+    {"id": "R06", "category": "evidencia", "name": "Segurança e infraestrutura favorecem Cibersegurança",
+      "if": {"all": [{"fact": "affinities.security", "op": ">=", "value": 4}, {"fact": "affinities.infrastructure", "op": ">=", "value": 3}]},
+      "then": {"evidence": {"cybersecurity": 0.5}},
+      "explanation": "Cibersegurança combina interesse por ataques e defesa com conhecimento de redes e sistemas."},
+    {"id": "R07", "category": "evidencia", "name": "Baixa afinidade com segurança",
+      "if": {"fact": "affinities.security", "op": "<=", "value": 2},
+      "then": {"evidence": {"cybersecurity": -0.4}},
+      "explanation": "Segurança é a atividade central da carreira de Cibersegurança."},
+    {"id": "R08", "category": "evidencia", "name": "Interesse por mobile com programação",
+      "if": {"all": [{"fact": "affinities.mobile_devices", "op": ">=", "value": 4}, {"fact": "affinities.programming", "op": ">=", "value": 3}]},
+      "then": {"evidence": {"mobile": 0.5}},
+      "explanation": "Desenvolvedores mobile programam para os recursos e restrições de smartphones."},
+    {"id": "R09", "category": "evidencia", "name": "Baixo interesse em dispositivos móveis",
+      "if": {"fact": "affinities.mobile_devices", "op": "<=", "value": 2},
+      "then": {"evidence": {"mobile": -0.3}},
+      "explanation": "O ecossistema mobile é o foco exclusivo da carreira Mobile."},
+    {"id": "R10", "category": "evidencia", "name": "Perfil de qualidade favorece QA",
+      "if": {"fact": "traits.quality_minded", "op": "==", "value": true},
+      "then": {"evidence": {"qa": 0.5}},
+      "explanation": "Engenheiros de QA antecipam falhas e automatizam validações."},
+    {"id": "R11", "category": "evidencia", "name": "Baixa comunicação e gestão",
+      "if": {"all": [{"fact": "affinities.communication", "op": "<=", "value": 2}, {"fact": "affinities.management", "op": "<=", "value": 2}]},
+      "then": {"evidence": {"pm": -0.5}},
+      "explanation": "Gestão de Produto depende fortemente de comunicação e organização."},
+    {"id": "R12", "category": "evidencia", "name": "Baixa afinidade com design",
+      "if": {"fact": "affinities.design", "op": "<=", "value": 2},
+      "then": {"evidence": {"frontend": -0.3}},
+      "explanation": "Front-end e UX exigem atenção constante a aspectos visuais e de experiência."},
+    {"id": "R13", "category": "evidencia", "name": "Nuvem com visão de negócio",
+      "if": {"all": [{"fact": "affinities.cloud_systems", "op": ">=", "value": 4}, {"fact": "affinities.business", "op": ">=", "value": 3}]},
+      "then": {"evidence": {"cloud": 0.3}},
+      "explanation": "Arquitetos de Cloud equilibram decisões técnicas com custos (FinOps) e necessidades de negócio."},
+    {"id": "R14", "category": "evidencia", "name": "Dados com infraestrutura e automação",
+      "if": {"all": [{"fact": "affinities.data_analysis", "op": ">=", "value": 4}, {"fact": "affinities.infrastructure", "op": ">=", "value": 3}, {"fact": "affinities.automation", "op": ">=", "value": 3}]},
+      "then": {"evidence": {"data_engineering": 0.4}},
+      "explanation": "Engenheiros de Dados automatizam a infraestrutura por onde os dados trafegam."},
+    {"id": "R15", "category": "evidencia", "name": "Matemática baixa",
+      "if": {"fact": "affinities.math", "op": "<=", "value": 2},
+      "then": {"evidence": {"data_science": -0.5, "data_engineering": -0.1}},
+      "explanation": "Ciência de Dados exige estatística, álgebra linear e cálculo com frequência."},
+    {"id": "R16", "category": "evidencia", "name": "Lógica e programação fortes",
+      "if": {"all": [{"fact": "affinities.programming", "op": ">=", "value": 4}, {"fact": "affinities.logic", "op": ">=", "value": 4}]},
+      "then": {"evidence": {"backend": 0.35, "data_engineering": 0.15, "mobile": 0.1}},
+      "explanation": "Back-end concentra a maior carga de lógica de negócio e algoritmos."},
+
+    {"id": "D01", "category": "desambiguacao", "name": "Ciência de Dados vs Engenharia de Dados (analítico)",
+      "if": {"all": [{"fact": "affinities.math", "op": ">=", "value": 4}, {"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Modelagem estatística, machine learning e inteligência artificial"},
+        {"fact": "choices.daily_challenge", "op": "==", "value": "Calibrar hiperparâmetros e testar hipóteses estatísticas"},
+        {"fact": "choices.value_delivery", "op": "==", "value": "Modelos preditivos acurados e inteligência artificial para decisão"}]}]},
+      "then": {"evidence": {"data_science": 0.6}},
+      "explanation": "Afinidade matemática alta somada ao interesse em modelos preditivos diferencia o Cientista de Dados do Engenheiro de Dados."},
+    {"id": "D02", "category": "desambiguacao", "name": "Engenharia de Dados vs Ciência de Dados (pipelines)",
+      "if": {"all": [{"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Pipelines de dados, arquitetura ETL/ELT e Data Lakes"},
+        {"fact": "choices.daily_challenge", "op": "==", "value": "Escalar pipelines de processamento distribuído de terabytes"},
+        {"fact": "choices.primary_tool", "op": "==", "value": "SQL / Ferramentas de Big Data (Spark, Airflow)"}]},
+        {"any": [
+        {"fact": "choices.value_delivery", "op": "==", "value": "Fluxo de dados limpo, rápido e confiável para toda a empresa"},
+        {"fact": "traits.deep_technical", "op": "==", "value": true}]}]},
+      "then": {"evidence": {"data_engineering": 0.5}},
+      "explanation": "Foco em dutos de dados escaláveis e computação distribuída consolida a vocação em Engenharia de Dados."},
+    {"id": "D03", "category": "desambiguacao", "name": "Front-end Web vs Mobile (web)",
+      "if": {"all": [{"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Interfaces visuais interativas, design e experiência do usuário"},
+        {"fact": "choices.daily_challenge", "op": "==", "value": "Ajustar CSS, microinterações e acessibilidade web"}]},
+        {"fact": "choices.device_focus", "op": "==", "value": "Agnóstico a hardware, foco total em software/lógica/regras"}]},
+      "then": {"evidence": {"frontend": 0.4, "mobile": -0.2}},
+      "explanation": "Interesse em interfaces sem amarração a hardware móvel aponta para o Front-end Web."},
+    {"id": "D04", "category": "desambiguacao", "name": "Front-end Web vs Mobile (mobile)",
+      "if": {"all": [{"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Aplicativos móveis nativos ou multiplataforma para smartphones"},
+        {"fact": "choices.primary_tool", "op": "==", "value": "Swift / Kotlin / Flutter / React Native"},
+        {"fact": "choices.daily_challenge", "op": "==", "value": "Gerenciar ciclo de vida de apps e permissões de hardware móvel"}]},
+        {"fact": "choices.device_focus", "op": "==", "value": "Dispositivos móveis, smartphones e tablets"}]},
+      "then": {"evidence": {"mobile": 0.6}},
+      "explanation": "Preferência explícita por dispositivos móveis e frameworks mobile desempata para a trilha Mobile."},
+    {"id": "D05", "category": "desambiguacao", "name": "DevOps vs Cloud (operação)",
+      "if": {"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Automação de CI/CD, esteiras de deploy, contêineres e alta disponibilidade"},
+        {"fact": "choices.primary_tool", "op": "==", "value": "Docker / Kubernetes / Terraform / CI-CD"},
+        {"fact": "choices.daily_challenge", "op": "==", "value": "Resolver gargalos em contêineres e orquestrar clusters K8s"}]},
+      "then": {"evidence": {"devops": 0.4}},
+      "explanation": "Esteiras de deploy contínuo, Kubernetes e resiliência diária definem DevOps e SRE."},
+    {"id": "D06", "category": "desambiguacao", "name": "DevOps vs Cloud (arquitetura)",
+      "if": {"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Arquitetura de sistemas em nuvem, migração e infraestrutura escalável"},
+        {"fact": "choices.primary_tool", "op": "==", "value": "Nuvem AWS / Azure / GCP"},
+        {"fact": "choices.daily_challenge", "op": "==", "value": "Desenhar diagramas de nuvem e arquitetar alta disponibilidade"}]},
+      "then": {"evidence": {"cloud": 0.4}},
+      "explanation": "Planejamento de migração e desenho de soluções para provedores de nuvem consolidam a trilha de Cloud."},
+    {"id": "D07", "category": "desambiguacao", "name": "Cibersegurança vs Infraestrutura",
+      "if": {"all": [{"fact": "choices.device_focus", "op": "==", "value": "Redes, roteadores, firewalls e servidores físicos"}, {"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Defesa cibernética, análise de vulnerabilidades e testes de invasão"},
+        {"fact": "choices.primary_tool", "op": "==", "value": "Linux / Bash / Ferramentas de Redes e Segurança"},
+        {"fact": "affinities.security", "op": ">=", "value": 4}]}]},
+      "then": {"evidence": {"cybersecurity": 0.5}},
+      "explanation": "Conhecimento de redes unido à postura investigativa de brechas direciona para Cibersegurança."},
+    {"id": "D08", "category": "desambiguacao", "name": "QA vs Desenvolvimento",
+      "if": {"all": [{"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Testes automatizados, caça a bugs e garantia de qualidade"},
+        {"fact": "choices.daily_challenge", "op": "==", "value": "Automatizar suítes de testes de regressão e carga"}]},
+        {"fact": "choices.value_delivery", "op": "==", "value": "Software sem bugs, estável e que cumpre todos os critérios"}]},
+      "then": {"evidence": {"qa": 0.5}},
+      "explanation": "Dedicação à garantia de critérios de aceitação e prevenção de regressões prioriza QA."},
+    {"id": "D09", "category": "desambiguacao", "name": "Product Manager vs Tech Lead",
+      "if": {"all": [{"fact": "traits.people_focus", "op": "==", "value": true}, {"any": [
+        {"fact": "choices.work_preference", "op": "==", "value": "Gestão de produto, estratégia de negócio, priorização e comunicação"},
+        {"fact": "choices.primary_tool", "op": "==", "value": "Ferramentas de Gestão e Ágil (Jira, Trello, Miro, Notion)"},
+        {"fact": "affinities.business", "op": ">=", "value": 4}]}]},
+      "then": {"evidence": {"pm": 0.6}},
+      "explanation": "Escolha primária por comunicação, dores do usuário e ritos ágeis define o Product Manager."},
+    {"id": "D10", "category": "desambiguacao", "name": "Raciocínio matemático fora de IA",
+      "if": {"all": [{"fact": "affinities.math", "op": ">=", "value": 4}, {"not": {"fact": "choices.work_preference", "op": "==", "value": "Modelagem estatística, machine learning e inteligência artificial"}}]},
+      "then": {"evidence": {"backend": 0.15, "data_engineering": 0.15}},
+      "explanation": "Alta capacidade analítica favorece algoritmos complexos no Back-end e particionamento em Dados."},
+    {"id": "D11", "category": "desambiguacao", "name": "Redes sem foco em segurança",
+      "if": {"all": [{"fact": "choices.device_focus", "op": "==", "value": "Redes, roteadores, firewalls e servidores físicos"}, {"not": {"fact": "choices.work_preference", "op": "==", "value": "Defesa cibernética, análise de vulnerabilidades e testes de invasão"}}]},
+      "then": {"evidence": {"devops": 0.2, "cloud": 0.2}},
+      "explanation": "Domínio de redes apoia infraestruturas híbridas em DevOps e topologias de nuvem."},
+
+    {"id": "P01", "category": "proficiencia", "name": "Base prática em contêineres e Linux",
+      "if": {"all": [{"fact": "proficiencies.docker", "op": ">=", "value": 3}, {"fact": "proficiencies.linux", "op": ">=", "value": 3}]},
+      "then": {"evidence": {"devops": 0.3, "cloud": 0.15}},
+      "explanation": "Docker e Linux são a base prática de DevOps e Cloud."},
+    {"id": "P02", "category": "proficiencia", "name": "Experiência com Machine Learning",
+      "if": {"fact": "proficiencies.machine_learning", "op": ">=", "value": 3},
+      "then": {"evidence": {"data_science": 0.4}},
+      "explanation": "Prática com modelos preditivos é a competência central do Cientista de Dados."},
+    {"id": "P03", "category": "proficiencia", "name": "Experiência com interfaces web",
+      "if": {"any": [{"fact": "proficiencies.react", "op": ">=", "value": 3}, {"fact": "proficiencies.html_css", "op": ">=", "value": 4}]},
+      "then": {"evidence": {"frontend": 0.3}},
+      "explanation": "Domínio prático de HTML, CSS e frameworks reativos aproxima do Front-end."},
+    {"id": "P04", "category": "proficiencia", "name": "SQL e Python fortes",
+      "if": {"all": [{"fact": "proficiencies.sql", "op": ">=", "value": 4}, {"fact": "proficiencies.python", "op": ">=", "value": 3}]},
+      "then": {"evidence": {"data_engineering": 0.25, "data_science": 0.15, "backend": 0.1}},
+      "explanation": "SQL avançado com Python é a combinação mais requisitada em vagas de dados."},
+    {"id": "P05", "category": "proficiencia", "name": "Conhecimento sólido de redes",
+      "if": {"fact": "proficiencies.redes", "op": ">=", "value": 4},
+      "then": {"evidence": {"cybersecurity": 0.2, "cloud": 0.2, "devops": 0.15}},
+      "explanation": "Redes são pré-requisito forte para Segurança, Cloud e DevOps."},
+    {"id": "P06", "category": "proficiencia", "name": "Experiência em automação de testes",
+      "if": {"any": [{"fact": "proficiencies.automacao_e2e", "op": ">=", "value": 3}, {"fact": "proficiencies.testes_automatizados", "op": ">=", "value": 4}]},
+      "then": {"evidence": {"qa": 0.3}},
+      "explanation": "Automação de testes é a assinatura técnica do Engenheiro de QA."},
+    {"id": "P07", "category": "proficiencia", "name": "Experiência com desenvolvimento mobile",
+      "if": {"fact": "proficiencies.dev_mobile", "op": ">=", "value": 3},
+      "then": {"evidence": {"mobile": 0.35}},
+      "explanation": "Já ter construído aplicativos acelera a entrada na carreira Mobile."},
+    {"id": "P08", "category": "proficiencia", "name": "Experiência com produto",
+      "if": {"any": [{"fact": "proficiencies.product_discovery", "op": ">=", "value": 3}, {"fact": "proficiencies.priorizacao_roadmap", "op": ">=", "value": 3}]},
+      "then": {"evidence": {"pm": 0.3}},
+      "explanation": "Discovery e priorização são as práticas centrais de um Product Manager."},
+    {"id": "P09", "category": "proficiencia", "name": "Experiência com APIs",
+      "if": {"fact": "proficiencies.apis_rest", "op": ">=", "value": 3},
+      "then": {"evidence": {"backend": 0.3}},
+      "explanation": "Construir APIs é a entrega mais comum de um desenvolvedor Back-end."},
+    {"id": "P10", "category": "proficiencia", "name": "Experiência com nuvem",
+      "if": {"fact": "proficiencies.cloud_fundamentos", "op": ">=", "value": 4},
+      "then": {"evidence": {"cloud": 0.3, "devops": 0.15}},
+      "explanation": "Domínio de um provedor de nuvem é o núcleo da carreira de Cloud."},
+    {"id": "P11", "category": "proficiencia", "name": "Experiência em análise de vulnerabilidades",
+      "if": {"fact": "proficiencies.pentest_ferramentas", "op": ">=", "value": 3},
+      "then": {"evidence": {"cybersecurity": 0.35}},
+      "explanation": "Prática com ferramentas de segurança demonstra aptidão para Cibersegurança."}
+  ],
+
+  "careers": {
+    "backend": {
+      "name": "Desenvolvimento Back-end",
+      "icon": "⚙️",
+      "summary": "Foco em lógica de servidores, construção de APIs, regras de negócio e bancos de dados.",
+      "description": "O Engenheiro Back-end projeta a lógica central de negócio, modela e otimiza bancos de dados, cria APIs seguras e garante que as requisições sejam processadas com desempenho, escalabilidade e integridade.",
+      "technologies": ["Python (FastAPI, Django)", "Node.js / TypeScript (NestJS)", "Java (Spring Boot) / C# (.NET) / Go", "PostgreSQL, MongoDB, Redis", "RabbitMQ, Kafka"],
+      "salary_range": {"junior": "R$ 4.000 - R$ 6.500", "pleno": "R$ 7.500 - R$ 12.000", "senior": "R$ 13.000 - R$ 22.000+"},
+      "market_demand": "Muito alta",
+      "affinity_profile": {"programming": 3, "logic": 3, "math": 1, "data_analysis": 1, "infrastructure": 1, "automation": 1, "testing": 1, "security": 1},
+      "junior_competencies": [
+        {"id": "logica_programacao", "level": 4, "weight": 3},
+        {"id": "git", "level": 3, "weight": 3},
+        {"any_of": ["python", "backend_typed", "javascript"], "label": "Linguagem de back-end", "level": 3, "weight": 3},
+        {"id": "sql", "level": 3, "weight": 3},
+        {"id": "apis_rest", "level": 3, "weight": 3},
+        {"id": "poo", "level": 3, "weight": 2},
+        {"id": "estruturas_dados", "level": 3, "weight": 2},
+        {"id": "orm_modelagem", "level": 3, "weight": 2},
+        {"id": "testes_automatizados", "level": 2, "weight": 2},
+        {"id": "linux", "level": 2, "weight": 1},
+        {"id": "docker", "level": 2, "weight": 1},
+        {"id": "autenticacao_seguranca_app", "level": 2, "weight": 1},
+        {"id": "mensageria_cache", "level": 2, "weight": 1},
+        {"id": "arquitetura_software", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "API de gerenciamento de tarefas", "level": "iniciante", "hours": 20, "competencies": ["apis_rest", "sql", "git"], "description": "API REST com CRUD, validação de dados, banco relacional e documentação OpenAPI."},
+        {"title": "Encurtador de URLs com estatísticas", "level": "iniciante", "hours": 15, "competencies": ["apis_rest", "estruturas_dados", "sql"], "description": "Gera links curtos, redireciona e contabiliza acessos por período."},
+        {"title": "API de e-commerce com autenticação", "level": "intermediario", "hours": 35, "competencies": ["autenticacao_seguranca_app", "orm_modelagem", "testes_automatizados", "docker"], "description": "Catálogo, carrinho e pedidos com JWT, testes de integração e ambiente em Docker Compose."},
+        {"title": "Sistema de notificações assíncronas", "level": "avancado", "hours": 30, "competencies": ["mensageria_cache", "arquitetura_software", "docker"], "description": "Microsserviço que consome eventos de uma fila e envia e-mails com retentativas e cache."}
+      ],
+      "certifications": [
+        {"name": "Oracle Certified Associate, Java SE", "provider": "Oracle", "level": "intermediario", "note": "Relevante para quem segue com Java."},
+        {"name": "Microsoft Azure Developer Associate (AZ-204)", "provider": "Microsoft", "level": "avancado", "note": "Valoriza back-ends implantados em nuvem."},
+        {"name": "PCEP / PCAP - Python Institute", "provider": "Python Institute", "level": "iniciante", "note": "Comprova fundamentos de Python."}
+      ]
+    },
+
+    "frontend": {
+      "name": "Desenvolvimento Front-end & UI/UX",
+      "icon": "🎨",
+      "summary": "Foco em interfaces web responsivas, experiência do usuário e frameworks reativos.",
+      "description": "O Engenheiro Front-end transforma protótipos em interfaces web fluidas, acessíveis e reativas, otimizando desempenho, acessibilidade e usabilidade em múltiplos navegadores e resoluções.",
+      "technologies": ["React, Next.js, Vue, Angular", "TypeScript, Tailwind CSS, SASS", "Figma", "Vite, Vitest, Testing Library"],
+      "salary_range": {"junior": "R$ 3.800 - R$ 6.000", "pleno": "R$ 7.000 - R$ 11.500", "senior": "R$ 12.500 - R$ 20.000+"},
+      "market_demand": "Muito alta",
+      "affinity_profile": {"programming": 3, "design": 3, "logic": 1, "communication": 1, "testing": 1},
+      "junior_competencies": [
+        {"id": "html_css", "level": 4, "weight": 3},
+        {"id": "javascript", "level": 4, "weight": 3},
+        {"id": "react", "level": 3, "weight": 3},
+        {"id": "logica_programacao", "level": 3, "weight": 3},
+        {"id": "git", "level": 3, "weight": 3},
+        {"id": "typescript", "level": 2, "weight": 2},
+        {"id": "ux_ui", "level": 3, "weight": 2},
+        {"id": "acessibilidade", "level": 2, "weight": 2},
+        {"id": "apis_rest", "level": 2, "weight": 1},
+        {"id": "testes_automatizados", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "Landing page responsiva e acessível", "level": "iniciante", "hours": 12, "competencies": ["html_css", "acessibilidade", "git"], "description": "Página de produto com layout responsivo, nota acima de 90 no Lighthouse e publicada no GitHub Pages."},
+        {"title": "Dashboard de clima consumindo API pública", "level": "iniciante", "hours": 18, "competencies": ["javascript", "apis_rest", "html_css"], "description": "Busca por cidade, previsão de 5 dias e tratamento de erros de rede."},
+        {"title": "Clone funcional de quadro Kanban", "level": "intermediario", "hours": 35, "competencies": ["react", "typescript", "testes_automatizados"], "description": "Arrastar e soltar, persistência local, estado global e testes de componentes."},
+        {"title": "Design system com documentação", "level": "avancado", "hours": 30, "competencies": ["ux_ui", "react", "acessibilidade"], "description": "Biblioteca de componentes acessíveis documentada no Storybook a partir de um protótipo no Figma."}
+      ],
+      "certifications": [
+        {"name": "Google UX Design Certificate", "provider": "Google / Coursera", "level": "iniciante", "note": "Fundamentos de UX reconhecidos no mercado."},
+        {"name": "Meta Front-End Developer Certificate", "provider": "Meta / Coursera", "level": "intermediario", "note": "Cobre HTML, CSS, JavaScript e React."}
+      ]
+    },
+
+    "data_science": {
+      "name": "Ciência de Dados e Machine Learning",
+      "icon": "🧠",
+      "summary": "Foco em estatística, modelagem preditiva, análise de dados e inteligência artificial.",
+      "description": "O Cientista de Dados transforma dados em previsões e inteligência de negócio, utilizando rigor estatístico, algoritmos de Machine Learning e Deep Learning para resolver problemas preditivos.",
+      "technologies": ["Python (Pandas, NumPy, Scikit-Learn)", "PyTorch, TensorFlow, Hugging Face", "Jupyter, MLflow", "Matplotlib, Seaborn, Streamlit", "SQL analítico"],
+      "salary_range": {"junior": "R$ 4.500 - R$ 7.000", "pleno": "R$ 8.500 - R$ 13.500", "senior": "R$ 14.500 - R$ 25.000+"},
+      "market_demand": "Alta e em expansão com IA generativa",
+      "affinity_profile": {"math": 3, "data_analysis": 3, "programming": 2, "logic": 2, "business": 1, "communication": 1},
+      "junior_competencies": [
+        {"id": "python", "level": 3, "weight": 3},
+        {"id": "estatistica", "level": 3, "weight": 3},
+        {"id": "sql", "level": 3, "weight": 3},
+        {"id": "pandas_numpy", "level": 3, "weight": 3},
+        {"id": "machine_learning", "level": 3, "weight": 3},
+        {"id": "visualizacao_dados", "level": 3, "weight": 2},
+        {"id": "algebra_calculo", "level": 2, "weight": 2},
+        {"id": "git", "level": 2, "weight": 2},
+        {"id": "deep_learning", "level": 2, "weight": 1},
+        {"id": "comunicacao_stakeholders", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "Análise exploratória de dados públicos", "level": "iniciante", "hours": 15, "competencies": ["pandas_numpy", "visualizacao_dados", "estatistica"], "description": "Notebook com perguntas de negócio, limpeza de dados e conclusões apoiadas em gráficos."},
+        {"title": "Modelo de previsão de churn", "level": "intermediario", "hours": 30, "competencies": ["machine_learning", "pandas_numpy", "sql"], "description": "Pipeline com feature engineering, comparação de modelos, validação cruzada e explicação das variáveis."},
+        {"title": "Teste A/B de ponta a ponta", "level": "intermediario", "hours": 15, "competencies": ["estatistica", "visualizacao_dados", "comunicacao_stakeholders"], "description": "Desenho do experimento, cálculo de amostra, análise do resultado e recomendação de negócio."},
+        {"title": "Classificador de textos com deploy", "level": "avancado", "hours": 35, "competencies": ["deep_learning", "machine_learning", "python"], "description": "Fine-tuning de um modelo de linguagem e publicação em uma aplicação Streamlit."}
+      ],
+      "certifications": [
+        {"name": "Google Data Analytics Certificate", "provider": "Google / Coursera", "level": "iniciante", "note": "Boa porta de entrada em análise de dados."},
+        {"name": "IBM Data Science Professional Certificate", "provider": "IBM / Coursera", "level": "intermediario", "note": "Cobre o ciclo completo de ciência de dados."},
+        {"name": "Microsoft Azure Data Scientist Associate (DP-100)", "provider": "Microsoft", "level": "avancado", "note": "Valoriza MLOps em nuvem."}
+      ]
+    },
+
+    "data_engineering": {
+      "name": "Engenharia de Dados",
+      "icon": "🏗️",
+      "summary": "Foco em arquitetura de dados, construção de pipelines (ETL/ELT) e infraestrutura para Data Lakes.",
+      "description": "O Engenheiro de Dados projeta pipelines escaláveis de ETL/ELT, gerencia Data Lakes e Data Warehouses e garante governança, consistência e alta vazão para cientistas, analistas e aplicações.",
+      "technologies": ["Apache Spark, Airflow, dbt, Kafka", "Snowflake, BigQuery, Redshift", "Delta Lake, Iceberg, S3", "SQL avançado e Python", "Docker"],
+      "salary_range": {"junior": "R$ 4.500 - R$ 7.200", "pleno": "R$ 8.500 - R$ 14.000", "senior": "R$ 15.000 - R$ 26.000+"},
+      "market_demand": "Altíssima",
+      "affinity_profile": {"programming": 3, "data_analysis": 2, "logic": 2, "infrastructure": 2, "cloud_systems": 2, "automation": 2, "math": 1},
+      "junior_competencies": [
+        {"id": "sql", "level": 4, "weight": 3},
+        {"id": "python", "level": 3, "weight": 3},
+        {"id": "etl_pipelines", "level": 3, "weight": 3},
+        {"id": "logica_programacao", "level": 3, "weight": 2},
+        {"id": "modelagem_dimensional", "level": 3, "weight": 2},
+        {"id": "git", "level": 3, "weight": 2},
+        {"id": "linux", "level": 2, "weight": 2},
+        {"id": "cloud_fundamentos", "level": 2, "weight": 2},
+        {"id": "spark", "level": 2, "weight": 2},
+        {"id": "docker", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "Pipeline ETL de dados públicos", "level": "iniciante", "hours": 20, "competencies": ["etl_pipelines", "python", "sql"], "description": "Extrai dados de uma API pública diariamente, transforma e carrega em PostgreSQL."},
+        {"title": "Data Warehouse com dbt", "level": "intermediario", "hours": 25, "competencies": ["modelagem_dimensional", "sql", "git"], "description": "Modelagem em camadas com testes de qualidade de dados e documentação gerada pelo dbt."},
+        {"title": "Pipeline orquestrado em contêineres", "level": "intermediario", "hours": 30, "competencies": ["etl_pipelines", "docker", "linux"], "description": "Airflow em Docker Compose com DAGs idempotentes, alertas e retentativas."},
+        {"title": "Processamento em larga escala na nuvem", "level": "avancado", "hours": 35, "competencies": ["spark", "cloud_fundamentos"], "description": "Job PySpark processando milhões de registros armazenados em um data lake na nuvem."}
+      ],
+      "certifications": [
+        {"name": "Google Cloud Associate Data Practitioner", "provider": "Google Cloud", "level": "intermediario", "note": "Fundamentos de dados no GCP."},
+        {"name": "Databricks Certified Data Engineer Associate", "provider": "Databricks", "level": "avancado", "note": "Muito valorizada em vagas com Spark."},
+        {"name": "dbt Analytics Engineering Certification", "provider": "dbt Labs", "level": "avancado", "note": "Para quem atua com modelagem moderna de dados."}
+      ]
+    },
+
+    "cybersecurity": {
+      "name": "Cibersegurança (Security / Pentesting)",
+      "icon": "🛡️",
+      "summary": "Foco em defesa cibernética, análise de vulnerabilidades, criptografia e redes seguras.",
+      "description": "O Especialista em Cibersegurança protege ativos digitais atuando na defesa (Blue Team), monitorando e fortalecendo arquiteturas, ou no ataque ético (Red Team), simulando invasões para corrigir brechas.",
+      "technologies": ["Kali Linux, Nmap, Wireshark, Burp Suite", "SIEM e EDR (Splunk, Elastic, Wazuh)", "Python e Bash para automação", "SAST/DAST (SonarQube, ZAP)"],
+      "salary_range": {"junior": "R$ 4.200 - R$ 6.800", "pleno": "R$ 8.000 - R$ 13.500", "senior": "R$ 14.000 - R$ 24.000+"},
+      "market_demand": "Muito alta e estratégica",
+      "affinity_profile": {"security": 3, "infrastructure": 3, "logic": 2, "programming": 1, "automation": 1, "testing": 1},
+      "junior_competencies": [
+        {"id": "redes", "level": 4, "weight": 3},
+        {"id": "linux", "level": 3, "weight": 3},
+        {"id": "fundamentos_seguranca", "level": 3, "weight": 3},
+        {"id": "bash", "level": 2, "weight": 2},
+        {"id": "python", "level": 2, "weight": 2},
+        {"id": "pentest_ferramentas", "level": 3, "weight": 2},
+        {"id": "resposta_incidentes", "level": 2, "weight": 2},
+        {"id": "autenticacao_seguranca_app", "level": 2, "weight": 2},
+        {"id": "cloud_fundamentos", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "Laboratório doméstico de segurança", "level": "iniciante", "hours": 15, "competencies": ["linux", "redes", "fundamentos_seguranca"], "description": "Rede virtual com máquinas atacante e alvo, documentando topologia e regras de firewall."},
+        {"title": "Write-ups de desafios CTF", "level": "iniciante", "hours": 20, "competencies": ["pentest_ferramentas", "linux", "bash"], "description": "Repositório com soluções detalhadas de desafios do TryHackMe e OverTheWire."},
+        {"title": "SIEM caseiro com alertas", "level": "intermediario", "hours": 25, "competencies": ["resposta_incidentes", "linux", "redes"], "description": "Wazuh ou Elastic coletando logs, com regras de detecção e um relatório de incidente simulado."},
+        {"title": "Scanner de vulnerabilidades em Python", "level": "avancado", "hours": 30, "competencies": ["python", "autenticacao_seguranca_app", "pentest_ferramentas"], "description": "Ferramenta que verifica cabeçalhos de segurança, portas abertas e configurações inseguras."}
+      ],
+      "certifications": [
+        {"name": "Google Cybersecurity Certificate", "provider": "Google / Coursera", "level": "iniciante", "note": "Introdução prática à área."},
+        {"name": "ISC2 Certified in Cybersecurity (CC)", "provider": "ISC2", "level": "iniciante", "note": "Certificação de entrada reconhecida."},
+        {"name": "CompTIA Security+", "provider": "CompTIA", "level": "intermediario", "note": "A mais pedida em vagas Júnior."},
+        {"name": "eJPT - Junior Penetration Tester", "provider": "INE Security", "level": "avancado", "note": "Para quem mira pentest."}
+      ]
+    },
+
+    "devops": {
+      "name": "DevOps & SRE",
+      "icon": "♾️",
+      "summary": "Foco em automação de processos, integração e entrega contínua (CI/CD) e contêineres.",
+      "description": "O Engenheiro DevOps/SRE cria esteiras automatizadas de CI/CD, orquestra contêineres, garante observabilidade e mantém a confiabilidade e a disponibilidade dos serviços.",
+      "technologies": ["Docker, Kubernetes, Helm", "GitHub Actions, GitLab CI, ArgoCD", "Terraform, Ansible", "Prometheus, Grafana", "Linux, Bash, Python/Go"],
+      "salary_range": {"junior": "R$ 4.500 - R$ 7.200", "pleno": "R$ 8.500 - R$ 14.000", "senior": "R$ 15.000 - R$ 25.000+"},
+      "market_demand": "Altíssima",
+      "affinity_profile": {"automation": 3, "infrastructure": 3, "cloud_systems": 2, "programming": 2, "security": 1, "testing": 1},
+      "junior_competencies": [
+        {"id": "linux", "level": 4, "weight": 3},
+        {"id": "git", "level": 3, "weight": 3},
+        {"id": "docker", "level": 3, "weight": 3},
+        {"id": "ci_cd", "level": 3, "weight": 3},
+        {"id": "bash", "level": 3, "weight": 3},
+        {"id": "redes", "level": 3, "weight": 2},
+        {"id": "cloud_fundamentos", "level": 3, "weight": 2},
+        {"id": "kubernetes", "level": 2, "weight": 2},
+        {"id": "iac_terraform", "level": 2, "weight": 2},
+        {"id": "observabilidade", "level": 2, "weight": 2},
+        {"id": "python", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "Pipeline de CI para um projeto open source", "level": "iniciante", "hours": 12, "competencies": ["ci_cd", "git", "docker"], "description": "Workflow que roda testes, lint e publica uma imagem Docker a cada tag."},
+        {"title": "Scripts de automação de servidor", "level": "iniciante", "hours": 12, "competencies": ["bash", "linux"], "description": "Provisionamento de usuários, backup com rotação e monitoramento simples de disco."},
+        {"title": "Aplicação em Kubernetes com observabilidade", "level": "intermediario", "hours": 35, "competencies": ["kubernetes", "observabilidade", "docker"], "description": "Deploy em cluster local com Ingress, autoescalonamento e dashboards no Grafana."},
+        {"title": "Infraestrutura completa como código", "level": "avancado", "hours": 30, "competencies": ["iac_terraform", "cloud_fundamentos", "ci_cd"], "description": "Rede, cluster e banco provisionados com Terraform e aplicados via pipeline."}
+      ],
+      "certifications": [
+        {"name": "Linux Foundation Certified IT Associate (LFCA)", "provider": "Linux Foundation", "level": "iniciante", "note": "Fundamentos de Linux e cloud."},
+        {"name": "HashiCorp Certified: Terraform Associate", "provider": "HashiCorp", "level": "intermediario", "note": "IaC é exigida na maioria das vagas."},
+        {"name": "Certified Kubernetes Administrator (CKA)", "provider": "CNCF", "level": "avancado", "note": "Referência em orquestração."}
+      ]
+    },
+
+    "cloud": {
+      "name": "Computação em Nuvem (Cloud Architecture)",
+      "icon": "☁️",
+      "summary": "Foco em planejamento, migração e gestão de infraestruturas escaláveis (AWS/Azure/GCP).",
+      "description": "O profissional de Cloud projeta topologias distribuídas sobre AWS, Azure e Google Cloud, planeja migrações, garante redundância, governança de acessos e otimização de custos (FinOps).",
+      "technologies": ["AWS (EC2, S3, RDS, Lambda, VPC)", "Azure (VMs, App Services, Entra ID)", "Google Cloud (Compute Engine, GKE)", "Terraform, CloudFormation, Bicep"],
+      "salary_range": {"junior": "R$ 4.800 - R$ 7.500", "pleno": "R$ 9.000 - R$ 15.000", "senior": "R$ 16.000 - R$ 28.000+"},
+      "market_demand": "Muito alta",
+      "affinity_profile": {"cloud_systems": 3, "infrastructure": 3, "security": 2, "automation": 2, "business": 1, "management": 1, "programming": 1},
+      "junior_competencies": [
+        {"id": "cloud_fundamentos", "level": 4, "weight": 3},
+        {"id": "redes", "level": 3, "weight": 3},
+        {"id": "arquitetura_cloud", "level": 3, "weight": 3},
+        {"id": "iam_seguranca_cloud", "level": 3, "weight": 3},
+        {"id": "linux", "level": 3, "weight": 2},
+        {"id": "iac_terraform", "level": 2, "weight": 2},
+        {"id": "docker", "level": 2, "weight": 2},
+        {"id": "fundamentos_seguranca", "level": 2, "weight": 1},
+        {"any_of": ["python", "bash"], "label": "Linguagem de automação", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "Site estático com CDN e domínio próprio", "level": "iniciante", "hours": 10, "competencies": ["cloud_fundamentos", "redes"], "description": "Hospedagem em armazenamento de objetos com CDN, HTTPS e DNS configurados."},
+        {"title": "Aplicação serverless", "level": "intermediario", "hours": 25, "competencies": ["cloud_fundamentos", "iam_seguranca_cloud", "arquitetura_cloud"], "description": "API com funções serverless, banco gerenciado e políticas IAM de menor privilégio."},
+        {"title": "Arquitetura de alta disponibilidade", "level": "intermediario", "hours": 30, "competencies": ["arquitetura_cloud", "redes", "linux"], "description": "Aplicação em múltiplas zonas com balanceador, autoescalonamento e diagrama de arquitetura."},
+        {"title": "Landing zone com Terraform", "level": "avancado", "hours": 35, "competencies": ["iac_terraform", "iam_seguranca_cloud", "arquitetura_cloud"], "description": "Contas, redes e políticas de segurança provisionadas como código, com estimativa de custos."}
+      ],
+      "certifications": [
+        {"name": "AWS Certified Cloud Practitioner", "provider": "AWS", "level": "iniciante", "note": "Fundamentos da AWS."},
+        {"name": "Microsoft Azure Fundamentals (AZ-900)", "provider": "Microsoft", "level": "iniciante", "note": "Fundamentos do Azure."},
+        {"name": "AWS Certified Solutions Architect - Associate", "provider": "AWS", "level": "intermediario", "note": "A mais valorizada para cargos de arquitetura."},
+        {"name": "Microsoft Azure Administrator (AZ-104)", "provider": "Microsoft", "level": "avancado", "note": "Para atuação operacional em Azure."}
+      ]
+    },
+
+    "mobile": {
+      "name": "Desenvolvimento Mobile",
+      "icon": "📱",
+      "summary": "Foco no ecossistema de dispositivos móveis (nativo ou multiplataforma com Flutter/React Native).",
+      "description": "O Desenvolvedor Mobile cria aplicações que lidam com bateria, memória, conectividade intermitente, integração com hardware (câmera, GPS, biometria) e publicação nas lojas de aplicativos.",
+      "technologies": ["Flutter / Dart", "React Native / TypeScript", "Kotlin / Jetpack Compose", "Swift / SwiftUI", "Firebase, SQLite, Fastlane"],
+      "salary_range": {"junior": "R$ 3.800 - R$ 6.200", "pleno": "R$ 7.200 - R$ 12.000", "senior": "R$ 13.000 - R$ 21.000+"},
+      "market_demand": "Alta",
+      "affinity_profile": {"mobile_devices": 3, "programming": 3, "design": 2, "logic": 1, "testing": 1},
+      "junior_competencies": [
+        {"id": "logica_programacao", "level": 3, "weight": 3},
+        {"id": "git", "level": 3, "weight": 3},
+        {"any_of": ["dart_kotlin_swift", "javascript"], "label": "Linguagem mobile", "level": 3, "weight": 3},
+        {"id": "dev_mobile", "level": 3, "weight": 3},
+        {"id": "poo", "level": 2, "weight": 2},
+        {"id": "apis_rest", "level": 2, "weight": 2},
+        {"id": "ux_ui", "level": 2, "weight": 2},
+        {"id": "publicacao_lojas", "level": 2, "weight": 1},
+        {"id": "testes_automatizados", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "App de lista de compras offline", "level": "iniciante", "hours": 15, "competencies": ["dev_mobile", "logica_programacao", "git"], "description": "Cadastro de itens com persistência local e interface adaptada a diferentes telas."},
+        {"title": "App de filmes consumindo API", "level": "intermediario", "hours": 25, "competencies": ["dev_mobile", "apis_rest", "ux_ui"], "description": "Busca, favoritos, paginação infinita e tratamento de estados de carregamento e erro."},
+        {"title": "App com recursos nativos", "level": "intermediario", "hours": 25, "competencies": ["dev_mobile", "poo", "testes_automatizados"], "description": "Uso de câmera, geolocalização e notificações, com testes de widgets ou componentes."},
+        {"title": "App publicado na loja", "level": "avancado", "hours": 20, "competencies": ["publicacao_lojas", "dev_mobile"], "description": "Aplicativo completo distribuído em trilha de testes com build automatizado."}
+      ],
+      "certifications": [
+        {"name": "Meta React Native Specialization", "provider": "Meta / Coursera", "level": "intermediario", "note": "Para quem segue com React Native."},
+        {"name": "Associate Android Developer (materiais oficiais Android)", "provider": "Google", "level": "avancado", "note": "Use os materiais oficiais como referência de estudo para Android nativo."}
+      ]
+    },
+
+    "qa": {
+      "name": "Engenharia de Qualidade e Testes (QA)",
+      "icon": "🔍",
+      "summary": "Foco em testes automatizados, confiabilidade de software e processos de qualidade.",
+      "description": "O Engenheiro de Qualidade projeta estratégias de testes, automação de ponta a ponta, testes de carga e regressão, atuando desde os requisitos para evitar que falhas cheguem aos usuários.",
+      "technologies": ["Playwright, Cypress, Selenium", "PyTest, JUnit, Jest", "Postman, RestAssured", "k6, JMeter", "Cucumber / Gherkin"],
+      "salary_range": {"junior": "R$ 3.600 - R$ 5.800", "pleno": "R$ 6.800 - R$ 11.000", "senior": "R$ 12.000 - R$ 19.000+"},
+      "market_demand": "Alta",
+      "affinity_profile": {"testing": 3, "logic": 2, "automation": 2, "programming": 2, "communication": 1, "management": 1},
+      "junior_competencies": [
+        {"id": "fundamentos_testes", "level": 4, "weight": 3},
+        {"id": "logica_programacao", "level": 3, "weight": 3},
+        {"any_of": ["python", "javascript", "backend_typed"], "label": "Linguagem para automação", "level": 3, "weight": 3},
+        {"id": "testes_automatizados", "level": 3, "weight": 3},
+        {"id": "automacao_e2e", "level": 3, "weight": 3},
+        {"id": "git", "level": 2, "weight": 2},
+        {"id": "testes_api_carga", "level": 2, "weight": 2},
+        {"id": "sql", "level": 2, "weight": 1},
+        {"id": "agil", "level": 2, "weight": 1},
+        {"id": "ci_cd", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "Plano e casos de teste de um site real", "level": "iniciante", "hours": 10, "competencies": ["fundamentos_testes", "agil"], "description": "Plano de testes, casos com técnicas de caixa-preta e relatório de bugs encontrados."},
+        {"title": "Suíte E2E com Page Objects", "level": "intermediario", "hours": 25, "competencies": ["automacao_e2e", "logica_programacao", "git"], "description": "Automação dos fluxos críticos de uma loja de demonstração com relatórios em HTML."},
+        {"title": "Testes de API e de carga", "level": "intermediario", "hours": 20, "competencies": ["testes_api_carga", "testes_automatizados"], "description": "Coleção de testes de contrato e cenário de carga com análise de latência."},
+        {"title": "Qualidade integrada ao pipeline", "level": "avancado", "hours": 20, "competencies": ["ci_cd", "automacao_e2e", "testes_automatizados"], "description": "Execução paralela das suítes em CI com bloqueio de merge em caso de falha."}
+      ],
+      "certifications": [
+        {"name": "ISTQB Certified Tester Foundation Level (CTFL)", "provider": "ISTQB / BSTQB", "level": "iniciante", "note": "A certificação mais reconhecida em testes."},
+        {"name": "ISTQB Test Automation Engineering (CTAL-TAE)", "provider": "ISTQB / BSTQB", "level": "avancado", "note": "Para especialização em automação."}
+      ]
+    },
+
+    "pm": {
+      "name": "Gestão de Produtos (Product Management)",
+      "icon": "🧭",
+      "summary": "Foco na ponte entre negócio, design e desenvolvimento, metodologias ágeis e priorização de produto.",
+      "description": "O Product Manager define a visão do produto, conduz pesquisas de descoberta, prioriza backlogs, estabelece métricas de sucesso e alinha equipes multidisciplinares para gerar valor contínuo.",
+      "technologies": ["Jira, Confluence, Linear, Notion", "Miro, FigJam", "Mixpanel, Amplitude, Google Analytics", "Figma", "SQL básico"],
+      "salary_range": {"junior": "R$ 5.000 - R$ 8.000", "pleno": "R$ 9.500 - R$ 15.500", "senior": "R$ 16.000 - R$ 27.000+"},
+      "market_demand": "Muito alta",
+      "affinity_profile": {"management": 3, "communication": 3, "business": 3, "data_analysis": 2, "design": 1, "logic": 1},
+      "junior_competencies": [
+        {"id": "comunicacao_stakeholders", "level": 4, "weight": 3},
+        {"id": "agil", "level": 3, "weight": 3},
+        {"id": "product_discovery", "level": 3, "weight": 3},
+        {"id": "priorizacao_roadmap", "level": 3, "weight": 3},
+        {"id": "metricas_produto", "level": 3, "weight": 2},
+        {"id": "ux_ui", "level": 2, "weight": 2},
+        {"id": "fundamentos_sdlc", "level": 2, "weight": 2},
+        {"id": "sql", "level": 2, "weight": 1}
+      ],
+      "projects": [
+        {"title": "Estudo de caso de produto existente", "level": "iniciante", "hours": 10, "competencies": ["metricas_produto", "product_discovery"], "description": "Análise de um app conhecido: público, proposta de valor, métricas e oportunidades de melhoria."},
+        {"title": "Discovery completo de uma ideia", "level": "intermediario", "hours": 20, "competencies": ["product_discovery", "ux_ui", "comunicacao_stakeholders"], "description": "Entrevistas, síntese de dores, protótipo no Figma e teste de usabilidade com 5 pessoas."},
+        {"title": "Roadmap e OKRs de um produto", "level": "intermediario", "hours": 15, "competencies": ["priorizacao_roadmap", "agil", "fundamentos_sdlc"], "description": "Backlog priorizado com RICE, OKRs trimestrais e plano de releases."},
+        {"title": "Análise de funil com SQL", "level": "avancado", "hours": 15, "competencies": ["sql", "metricas_produto"], "description": "Consultas de conversão e retenção sobre um dataset público com recomendações de produto."}
+      ],
+      "certifications": [
+        {"name": "Professional Scrum Product Owner I (PSPO I)", "provider": "Scrum.org", "level": "iniciante", "note": "Reconhecida para papéis de produto."},
+        {"name": "Product Management (Product School - PMC)", "provider": "Product School", "level": "intermediario", "note": "Formação abrangente em gestão de produto."}
+      ]
+    }
+  }
+}

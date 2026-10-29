@@ -1,43 +1,22 @@
 """
-Módulo de Inicialização do Motor Especialista de Carreiras em TI.
-Aplica patch de compatibilidade para a biblioteca Experta em versões modernas do Python (3.10+).
+Módulo do Motor Especialista de Carreiras em TI.
+Motor de inferência guiado pela base de conhecimento externa (data/regras_carreiras.json).
 """
-import collections
-import collections.abc
-
-# Patch para coleções abstratas movidas para collections.abc no Python 3.10+
-_COMPAT_ATTRS = [
-    'Mapping',
-    'MutableMapping',
-    'Sequence',
-    'MutableSequence',
-    'Iterable',
-    'Callable',
-    'Container',
-    'Hashable',
-    'Sized',
-    'Set',
-    'MutableSet'
-]
-
-for _attr in _COMPAT_ATTRS:
-    if not hasattr(collections, _attr) and hasattr(collections.abc, _attr):
-        setattr(collections, _attr, getattr(collections.abc, _attr))
-
-from engine.facts import (
-    UserProfile,
-    TrackScore,
-    TrackEvaluation,
-    FinalRecommendation,
-    RuleFiring
-)
+from engine.knowledge_base import KnowledgeBase, KnowledgeBaseError, load_knowledge_base
+from engine.inference import InferenceEngine, combine_certainty
+from engine.skill_gap import SkillGapAnalyzer, analyze_skill_gap
+from engine.roadmap import RoadmapGenerator, generate_roadmap
 from engine.advisor import CareerAdvisor
 
 __all__ = [
-    'UserProfile',
-    'TrackScore',
-    'TrackEvaluation',
-    'FinalRecommendation',
-    'RuleFiring',
+    'KnowledgeBase',
+    'KnowledgeBaseError',
+    'load_knowledge_base',
+    'InferenceEngine',
+    'combine_certainty',
+    'SkillGapAnalyzer',
+    'analyze_skill_gap',
+    'RoadmapGenerator',
+    'generate_roadmap',
     'CareerAdvisor'
 ]

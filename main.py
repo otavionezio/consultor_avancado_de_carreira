@@ -25,76 +25,78 @@ def run_personas_demo():
     advisor = CareerAdvisor()
     print("=" * 78)
     print(" CONSULTOR INTELIGENTE DE CARREIRAS EM TI - SISTEMA ESPECIALISTA")
-    print(" Demonstração e Validação das Personas de Teste (Experta / Forward Chaining)")
+    print(" Demonstração e Validação das Personas de Teste (Regras SE-ENTÃO + Fatores de Certeza)")
     print("=" * 78)
 
+    failures = 0
     for pid, pdata in TEST_PERSONAS.items():
         print(f"\n>> Testando Persona: {pdata['name']} ({pdata['badge']})")
         print(f"   Descrição: {pdata['description']}")
         res = advisor.diagnose(pdata["answers"])
         top = res["top_track"]
         expected = pdata["expected_track"]
-        status = "[SUCESSO]" if top["track_id"] == expected else "[FALHA]"
+        ok = top["track_id"] == expected
+        failures += 0 if ok else 1
+        status = "[SUCESSO]" if ok else "[FALHA]"
 
         print(f"   Resultado: {top['icon']} {top['name']} ({top['percentage']}%) [Status: {status}]")
+        print("   Top 3: " + " | ".join(f"{t['name']} {t['percentage']}%" for t in res["top3"]))
+        if res["ambiguity"]["message"]:
+            print(f"   Atenção: {res['ambiguity']['message']}")
         print(f"   Total de regras disparadas no ciclo: {res['total_rules_fired']}")
         print("   Principais regras que ativaram esta recomendação:")
         for rule in res["top_track_rules"][:3]:
-            print(f"     - [{rule['rule_id']}] {rule['rule_name']} (+{rule['points']:.0f} pts)")
+            print(f"     - [{rule['rule_id']}] {rule['rule_name']} (FC {rule['points']:+.2f})")
             print(f"       Justificativa: {rule['reason']}")
 
+        plan = advisor.build_development_plan(top["track_id"], pdata["answers"])
+        gap, roadmap = plan["skill_gap"], plan["roadmap"]
+        print(f"   Prontidão Júnior: {gap['readiness_pct']}% ({gap['level']['label']}) | "
+              f"Plano: {roadmap['total_hours']} h em {roadmap['total_weeks']} semanas")
+
     print("\n" + "=" * 78)
-    print(" Validação concluída com sucesso para todas as personas!")
+    if failures:
+        print(f" Validação concluída com {failures} persona(s) fora do esperado.")
+    else:
+        print(" Validação concluída com sucesso para todas as personas!")
     print("=" * 78)
 
 
+def _ask_scale(prompt: str) -> int | None:
+    raw = input(f"{prompt} (1-5, Enter para pular): ").strip()
+    return int(raw) if raw in {"1", "2", "3", "4", "5"} else None
+
+
 def run_cli_interview():
-    """Executa uma entrevista interativa via console."""
+    """Executa uma entrevista interativa via console usando a base de conhecimento."""
+    advisor = CareerAdvisor()
+    kb = advisor.kb
     print("=" * 70)
     print(" ENTREVISTA VOCACIONAL EM TI (MODO TERMINAL)")
     print("=" * 70)
 
-    print("\n1. Afinidade Matemática e Estatística:")
-    print("   [1] Baixa  [2] Média  [3] Alta")
-    math_choice = input("Escolha (1-3): ").strip()
-    math_map = {"1": "Baixa", "2": "Média", "3": "Alta"}
-    math_affinity = math_map.get(math_choice, "Média")
+    answers = {"profile": {}, "affinities": {}, "proficiencies": {}, "choices": {}}
+    print("\nAfinidades: quanto você GOSTA de cada tema?")
+    for aff_id, aff in kb.affinities.items():
+        value = _ask_scale(f"  {aff['label']}")
+        if value:
+            answers["affinities"][aff_id] = value
 
-    print("\n2. Preferência de Atuação Diária:")
-    work_list = [
-        "Lógica de negócios, APIs e bancos de dados",
-        "Interfaces visuais interativas, design e experiência do usuário",
-        "Modelagem estatística, machine learning e inteligência artificial",
-        "Pipelines de dados, arquitetura ETL/ELT e Data Lakes",
-        "Defesa cibernética, análise de vulnerabilidades e testes de invasão",
-        "Automação de CI/CD, esteiras de deploy, contêineres e alta disponibilidade",
-        "Arquitetura de sistemas em nuvem, migração e infraestrutura escalável",
-        "Aplicativos móveis nativos ou multiplataforma para smartphones",
-        "Testes automatizados, caça a bugs e garantia de qualidade",
-        "Gestão de produto, estratégia de negócio, priorização e comunicação"
-    ]
-    for i, w in enumerate(work_list, start=1):
-        print(f"   [{i}] {w}")
-    w_idx = int(input("Escolha (1-10): ").strip() or "1") - 1
-    work_preference = work_list[max(0, min(w_idx, len(work_list) - 1))]
+    print("\nPreferências de atuação:")
+    for question in kb.choice_questions:
+        print(f"\n{question['question']}")
+        for i, option in enumerate(question["options"], start=1):
+            print(f"   [{i}] {option['value']}")
+        raw = input("Escolha (Enter para pular): ").strip()
+        if raw.isdigit() and 1 <= int(raw) <= len(question["options"]):
+            answers["choices"][question["id"]] = question["options"][int(raw) - 1]["value"]
 
-    # Executa diagnóstico preliminar com o motor
-    advisor = CareerAdvisor()
-    res = advisor.diagnose({
-        "math_affinity": math_affinity,
-        "work_preference": work_preference,
-        "primary_tool": "Python",
-        "value_delivery": "APIs robustas, regras de negócio e estabilidade de servidor",
-        "daily_challenge": "Otimizar algoritmos e consultas SQL complexas",
-        "communication_vs_code": "Foco balanceado entre desenvolvimento técnico e colaboração",
-        "device_focus": "Agnóstico a hardware, foco total em software/lógica/regras"
-    })
-
-    top = res["top_track"]
+    res = advisor.diagnose(answers)
     print("\n" + "=" * 70)
-    print(f"TRILHA RECOMENDADA: {top['icon']} {top['name']}")
-    print(f"Compatibilidade: {top['percentage']}%")
-    print(f"{top['summary']}")
+    for pos, track in enumerate(res["top3"], start=1):
+        print(f"{pos}º {track['icon']} {track['name']}: {track['percentage']}% (confiança {track['confidence_label']})")
+    if res["ambiguity"]["message"]:
+        print(res["ambiguity"]["message"])
     print("=" * 70)
 
 
