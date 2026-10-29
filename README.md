@@ -1,179 +1,213 @@
-#  Consultor Inteligente de Carreiras em TI
-### Sistema Especialista Baseado em Regras em Python (Experta & Streamlit)
+#  Consultor Avançado de Carreiras em TI
+### Sistema Especialista para Mapeamento, Compatibilidade e Trilha de Carreira (Python & Streamlit)
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Rule Engine: Experta](https://img.shields.io/badge/Engine-Experta%201.9.4-green.svg)](https://github.com/nilp0inter/experta)
+[![Knowledge Base: JSON](https://img.shields.io/badge/Base%20de%20Conhecimento-JSON-green.svg)](data/regras_carreiras.json)
 [![UI: Streamlit](https://img.shields.io/badge/UI-Streamlit-red.svg)](https://streamlit.io/)
-[![Tests: Pytest](https://img.shields.io/badge/Tests-15%20Passed-brightgreen.svg)](https://pytest.org/)
+[![Tests: Pytest](https://img.shields.io/badge/Tests-50%20Passed-brightgreen.svg)](https://pytest.org/)
 
 ---
 
 ##  Visão Geral do Projeto
 
-O **Consultor Inteligente de Carreiras em TI** é um **Sistema Especialista baseado em regras lógicas** do tipo *SE-ENTÃO* que atua como orientador vocacional avançado em Tecnologia da Informação. 
+O **Consultor Avançado de Carreiras em TI** é um **Sistema Especialista baseado em regras** do tipo *SE-ENTÃO* que:
 
-O sistema entrevista o usuário por meio de perguntas objetivas sobre suas preferências de trabalho, conhecimentos técnicos prévios, afinidade matemática e estilo de atuação diária. Utilizando um **motor de inferência baseado no algoritmo Rete com encadeamento para frente (*forward chaining*)**, o consultor diagnostica a trilha de carreira ideal dentre 10 opções possíveis e **justifica transparentemente** todas as regras disparadas que fundamentaram a decisão.
+1. **Mapeia o perfil** do usuário com um questionário em etapas, diferenciando **afinidade** (o que a pessoa gosta de fazer) de **proficiência** (o que ela realmente sabe fazer);
+2. **Calcula a compatibilidade** (0% a 100%) com 10 carreiras de TI, apresentando ranking, Top 3, justificativas e tratamento de perfis ambíguos;
+3. **Analisa lacunas de competências** (*Skill Gap Analysis*) em relação ao nível Júnior da carreira escolhida;
+4. **Gera um roadmap personalizado** conforme as lacunas, o nível atual e o tempo disponível para estudar.
+
+Toda a regra de negócio — perfis das carreiras, pesos, regras, competências e recomendações — fica na base de conhecimento externa [`data/regras_carreiras.json`](data/regras_carreiras.json), carregada dinamicamente. Nenhuma regra está fixa no código Python.
+
+> Os percentuais representam **compatibilidade segundo as regras do sistema**, e não probabilidade de sucesso profissional.
 
 ---
 
 ##  Escopo: As 10 Trilhas de Carreira
 
-O sistema é calibrado para diferenciar com precisão 10 áreas da tecnologia:
-
-1.  Desenvolvimento Back-end: Foco em lógica de servidores, construção de APIs REST/gRPC, regras de negócio e modelagem de bancos de dados relacionais e NoSQL.
-2.  Desenvolvimento Front-end & UI/UX: Foco em interfaces web responsivas, componentes reativos, design systems, acessibilidade e experiência do usuário final.
-3.  Ciência de Dados e Machine Learning: Foco em métodos estatísticos, modelagem preditiva supervisionada/não-supervisionada, Processamento de Linguagem Natural e Inteligência Artificial.
-4.  Engenharia de Dados: Foco em arquitetura e escalabilidade de pipelines de dados (ETL/ELT), orquestração de fluxos massivos e infraestrutura para Data Lakes e Data Warehouses.
-5.  Cibersegurança (Security / Pentesting): Foco em defesa cibernética, análise de vulnerabilidades, perícia digital, criptografia, redes seguras e testes de invasão éticos.
-6.  DevOps & SRE: Foco em automação de esteiras de integração e entrega contínua (CI/CD), orquestração de contêineres em escala (Kubernetes) e confiabilidade operacional (Site Reliability Engineering).
-7.  Computação em Nuvem (Cloud Architecture): Foco em desenho de topologias distribuídas, migração corporativa para nuvem (AWS/Azure/GCP), alta disponibilidade e otimização financeira (FinOps).
-8.  Desenvolvimento Mobile: Foco no ecossistema de dispositivos móveis (smartphones e tablets), abrangendo desenvolvimento multiplataforma (Flutter/React Native) ou nativo (Swift/Kotlin).
-9.  Engenharia de Qualidade e Testes (QA): Foco em automação de baterias de testes (unitários, integração, E2E, carga), prevenção de falhas em esteiras de software e processos de qualidade.
-10.  Gestão de Produtos (Product Management): Foco na interseção entre estratégia de negócio, priorização de backlogs, liderança de ritos ágeis (Scrum/Kanban) e alinhamento de stakeholders.
+1. **Back-end:** lógica de servidores, APIs REST/gRPC, regras de negócio e bancos de dados.
+2. **Front-end & UI/UX:** interfaces web responsivas, frameworks reativos, design systems e acessibilidade.
+3. **Ciência de Dados:** estatística, modelagem preditiva, Machine Learning e IA.
+4. **Engenharia de Dados:** pipelines ETL/ELT, orquestração, Data Lakes e Data Warehouses.
+5. **Cibersegurança:** defesa cibernética, análise de vulnerabilidades, redes seguras e pentest.
+6. **DevOps & SRE:** CI/CD, contêineres, Kubernetes, IaC e observabilidade.
+7. **Arquitetura de Cloud:** topologias em AWS/Azure/GCP, migração, alta disponibilidade e FinOps.
+8. **Desenvolvimento Mobile:** apps nativos ou multiplataforma (Flutter/React Native/Kotlin/Swift).
+9. **QA e Testes:** estratégia de testes, automação E2E, testes de API e de carga.
+10. **Product Management:** discovery, priorização, métricas de produto e gestão de stakeholders.
 
 ---
 
-##  Arquitetura do Sistema e Encadeamento para Frente
+##  Arquitetura
 
 ```
-               [ Respostas do Usuário / Persona ]
-                               │
-                               ▼
-                    [ Fato: UserProfile ]
-                               │
-            ┌──────────────────┴──────────────────┐
-            ▼                                     ▼
- [ Regras Diretas (R01-R10) ]          [ Regras de Ferramentas (R11-R20) ]
- [ Regras de Valor (R21-R30) ]         [ Regras de Desafios (R31-R40) ]
-            │                                     │
-            └──────────────────┬──────────────────┘
-                               ▼
-               [ Regras Cruzadas de Desambiguação ]
-                   (Ex: Data Science vs Data Eng)
-                   (Ex: Front-end Web vs Mobile)
-                   (Ex: DevOps vs Cloud Arch)
-                               │
-                               ▼
-        [ Diagnóstico Consolidado & Justificativa Aberta ]
-               ├── Trilha Recomendada (com %)
-               ├── Regras Lógicas Disparadas
-               ├── Ranking das 10 Carreiras
-               └── Roteiro de Aprendizado (Roadmap)
+        [ Questionário em etapas / Persona / CLI ]
+                          │
+                          ▼
+      Normalização das respostas (perfil, afinidades,
+      proficiências, preferências; ausentes descartadas)
+                          │
+                          ▼
+     ┌──────────── Base de Conhecimento (JSON) ────────────┐
+     │ perfis das carreiras · pesos · regras SE-ENTÃO ·    │
+     │ competências Júnior · pré-requisitos · projetos ·   │
+     │ certificações · parâmetros do motor                 │
+     └─────────────────────────────────────────────────────┘
+                          │
+                          ▼
+   Motor de Inferência (engine/inference.py)
+     1. Encadeamento para frente (ciclos reconhecer-agir,
+        lógica de três valores para respostas ausentes)
+     2. Pontuação ponderada: afinidades · preferências · proficiência
+     3. Fatores de certeza (MYCIN) para evidências favoráveis/desfavoráveis
+                          │
+          ┌───────────────┼─────────────────┐
+          ▼               ▼                 ▼
+  Ranking + Top 3   Skill Gap Analysis   Roadmap personalizado
+  justificativas    (engine/skill_gap)   (engine/roadmap)
+  ambiguidade
+                          │
+                          ▼
+           Interface Streamlit (app.py + ui/charts.py)
 ```
 
-O sistema utiliza a biblioteca **Experta** (implementação em Python do algoritmo Rete de Sistemas Especialistas do padrão CLIPS).
+### Motor de inferência
 
-### Destaque da Engenharia de Regras (52 Regras Implementadas):
-- **10 Regras de Atuação Direta:** Identificam o núcleo de tarefas do dia a dia.
-- **10 Regras de Ferramentas & Linguagens:** Pontuam o domínio de stacks específicas.
-- **10 Regras de Entrega de Valor:** Capturam o propósito profissional almejado.
-- **10 Regras de Desafios Técnicos:** Avaliam o tipo de problema que mais motiva o usuário.
-- **12 Regras Cruzadas e Penalidades:** Eliminam ambiguidades em perfis com interesses sobrepostos (por exemplo, diferenciando rigor estatístico em Ciência de Dados de arquitetura de dados distribuída em Engenharia de Dados).
+- **Regras SE-ENTÃO (46):** regras de **derivação** (inferem traços como "perfil analítico" ou "perfil de infraestrutura"), de **evidência** (afinidades), de **desambiguação** (ex.: Ciência × Engenharia de Dados, Front-end × Mobile, DevOps × Cloud) e de **proficiência** (conhecimentos práticos). Os fatos derivados habilitam novas regras nos ciclos seguintes.
+- **Respostas ausentes:** condições sobre fatos não informados ficam "desconhecidas" e a regra não dispara. Na pontuação, cada componente pesa conforme a evidência disponível, com um *prior* neutro; respostas ausentes reduzem a **confiança** da avaliação, mas não penalizam a compatibilidade.
+- **Incerteza:** cada regra contribui com um fator de certeza entre -1 e +1. As contribuições são combinadas pelo modelo MYCIN e ajustam a pontuação base de forma limitada, mantendo o resultado entre 0% e 100% sem penalidades arbitrárias.
+- **Perfis ambíguos:** quando carreiras ficam a menos de 5 pontos percentuais da primeira colocada, o sistema sinaliza a ambiguidade e aponta as afinidades que mais as diferenciam.
+- **Afinidade × proficiência:** identifica talentos latentes (gosta, mas ainda não pratica) e competências sem interesse (domina, mas não gosta).
+
+### Análise de lacunas e roadmap
+
+- Cada competência exigida para o nível Júnior é classificada como **dominada**, **parcial** ou **ausente**, com prioridade calculada por peso, tamanho da lacuna e quantidade de competências que ela desbloqueia.
+- A ordem de estudo é uma **ordenação topológica** dos pré-requisitos; pré-requisitos externos à carreira são incluídos automaticamente.
+- O roadmap distribui as competências em **3 fases** (fundamentos, tecnologias prioritárias e diferenciais), calcula semanas conforme as horas semanais, verifica o prazo desejado e marca itens opcionais quando o plano não cabe no prazo.
+- Cada etapa traz **recursos de aprendizagem e exercícios práticos**; cada fase termina com um **projeto de portfólio** que usa apenas competências já estudadas. **Certificações** são recomendadas conforme o nível atual.
 
 ---
 
-##  Personas de Teste (Validação com 100% de Acerto)
+##  Interface Streamlit
 
-O sistema possui personas pré-configuradas para demonstração e validação automatizada:
+O questionário é apresentado em 5 etapas, com as respostas preservadas durante a navegação:
 
-| Persona | Perfil | Trilha Esperada | Diagnóstico Obtido | Status |
+1. **Perfil pessoal:** objetivo, experiência, horas semanais, prazo e estilo de trabalho.
+2. **Afinidades técnicas:** 14 afinidades em escala de 1 a 5 (com opção "Não informado") e preferências de atuação.
+3. **Conhecimentos atuais:** proficiência de 1 a 5 em 54 competências, agrupadas por área.
+4. **Resultados:** Top 3, ranking em barras, radar de afinidades, composição da pontuação, justificativas, regras disparadas e panorama de mercado.
+5. **Plano de desenvolvimento:** análise de lacunas, roadmap por fases e semanas, projetos, certificações e recomendações.
+
+A barra lateral permite carregar as personas de validação e exportar diagnóstico e plano em JSON.
+
+---
+
+##  Personas de Teste
+
+| Persona | Perfil | Trilha Esperada | Compatibilidade | Status |
 |---|---|---|---|:---:|
-| **Ana Silva** | Perfil Analítico / Estatístico | Ciência de Dados | `data_science` (100.0%) |  **Aprovado** |
-| **Carlos Rocha** | Perfil Infraestrutura / Redes | Cibersegurança | `cybersecurity` (100.0%) |  **Aprovado** |
-| **Beatriz Lima** | Perfil Criativo / UI/UX | Front-end & UI/UX | `frontend` (100.0%) |  **Aprovado** |
-| **Lucas Mendes** | Perfil Negócios / Estratégia | Product Management | `pm` (100.0%) |  **Aprovado** |
-| **Eduardo Santos** | Perfil Big Data / Pipelines | Engenharia de Dados | `data_engineering` (100.0%) |  **Aprovado** |
-| **Mariana Costa** | Perfil Automação / Contêineres | DevOps & SRE | `devops` (100.0%) |  **Aprovado** |
-| **Gabriel Alencar**| Perfil APIs / Servidor | Back-end | `backend` (83.6%) |  **Aprovado** |
-| **Rafael Nogueira**| Perfil Dispositivos Móveis | Mobile | `mobile` (100.0%) |  **Aprovado** |
-| **Camila Duarte** | Perfil Qualidade / Bugs | QA & Testes | `qa` (100.0%) |  **Aprovado** |
-| **Rodrigo Fonseca**| Perfil Nuvem / FinOps | Cloud Architecture | `cloud` (100.0%) |  **Aprovado** |
+| **Ana Silva** | Analítico / Estatístico | Ciência de Dados | 85.3% | Aprovado |
+| **Carlos Rocha** | Infraestrutura / Segurança | Cibersegurança | 87.7% | Aprovado |
+| **Beatriz Lima** | Criativo / UI/UX | Front-end & UI/UX | 80.6% | Aprovado |
+| **Lucas Mendes** | Negócios / Estratégia | Product Management | 89.4% | Aprovado |
+| **Eduardo Santos** | Big Data / Pipelines | Engenharia de Dados | 85.7% | Aprovado |
+| **Mariana Costa** | Automação / Contêineres | DevOps & SRE | 87.0% | Aprovado |
+| **Gabriel Alencar** | APIs / Servidor | Back-end | 81.3% | Aprovado |
+| **Rafael Nogueira** | Dispositivos Móveis | Mobile | 88.6% | Aprovado |
+| **Camila Duarte** | Qualidade / Bugs | QA & Testes | 82.8% | Aprovado |
+| **Rodrigo Fonseca** | Nuvem / FinOps | Cloud Architecture | 85.3% | Aprovado |
 
 ---
 
 ##  Como Instalar e Executar
 
 ### 1. Pré-requisitos
-- Python versão **3.10 ou superior** instalado.
-- Gerenciador de pacotes `pip`.
+- Python **3.10 ou superior** e `pip`.
 
-### 2. Clonar o Repositório ou Abrir a Pasta
+### 2. Clonar o repositório
 ```bash
-cd C:\Users\Pichau\PycharmProjects\PythonProject
+git clone https://github.com/otavionezio/consultor_avancado_de_carreira.git
+cd consultor_avancado_de_carreira
 ```
 
-### 3. Criar e Ativar o Ambiente Virtual (Opcional, mas Recomendado)
+### 3. Criar e ativar o ambiente virtual (opcional, recomendado)
 ```bash
-# Windows PowerShell / CMD
 python -m venv .venv
 .venv\Scripts\activate
 ```
 
-### 4. Instalar as Dependências
+### 4. Instalar as dependências
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Executar a Interface Web (Streamlit)
+### 5. Executar a interface web
 ```bash
 streamlit run app.py
 ```
-> O Streamlit abrirá automaticamente no seu navegador em `http://localhost:8501`. Na barra lateral, você pode selecionar e testar qualquer uma das Personas instantaneamente ou preencher o formulário manualmente!
 
-### 6. Executar via Linha de Comando (Modos CLI e Demonstração)
+### 6. Executar via linha de comando
 ```bash
-# Modo Demonstração e Validação das Personas no Console:
+# Validação das personas com diagnóstico e resumo do plano
 python main.py --demo
 
-# Modo Entrevista Interativa no Terminal:
+# Entrevista interativa no terminal
 python main.py --cli
 
-# Iniciar o Streamlit pelo main.py:
+# Iniciar o Streamlit pelo main.py
 python main.py --web
 ```
 
-### 7. Executar a Suíte de Testes Automatizados
+### 7. Executar os testes
 ```bash
 pytest -v
 ```
-Todos os 15 testes unitários de integração, desambiguação e regras de justificativa serão executados.
+Os 50 testes cobrem a base de conhecimento, o motor de inferência, o tratamento de respostas ausentes, a ambiguidade, a análise de lacunas, o roadmap e as 10 personas.
 
 ---
 
 ##  Estrutura do Repositório
 
 ```
-PythonProject/
-├── app.py                      # Interface Web Interativa desenvolvida com Streamlit
-├── main.py                     # Inicializador CLI e executor de validação
-├── requirements.txt            # Dependências do projeto
-├── README.md                   # Documentação oficial do projeto
-├── matriz_decisao.md           # Matriz de Decisão e mapeamento formal das 52 regras
-├── engine/                     # Núcleo do Sistema Especialista (Experta)
-│   ├── __init__.py             # Compatibilidade Python 3.10+ e exportação de classes
-│   ├── facts.py                # Fatos do motor (UserProfile, etc.)
-│   ├── rules.py                # Base de Conhecimento formal com 52 regras Experta
-│   └── advisor.py              # Fachada orquestradora e normalizadora do diagnóstico
-├── data/                       # Catálogos de dados e personas
-│   ├── __init__.py
-│   ├── career_tracks.py        # Metadados das 10 carreiras (salários, roadmaps, etc.)
-│   └── personas.py             # Definição das Personas de Teste validadas
-└── tests/                      # Testes automatizados
-    ├── __init__.py
-    └── test_advisor.py         # Testes com PyTest das personas e regras cruzadas
+consultor_avancado_de_carreira/
+├── app.py                      # Interface Streamlit em etapas
+├── main.py                     # Demonstração das personas, CLI e inicialização web
+├── requirements.txt
+├── matriz_decisao.md           # Matriz de decisão da versão anterior (regras Experta)
+├── data/
+│   ├── regras_carreiras.json   # Base de conhecimento: carreiras, pesos, regras, competências
+│   ├── career_tracks.py        # Catálogo das carreiras carregado do JSON
+│   └── personas.py             # Personas de validação
+├── engine/
+│   ├── knowledge_base.py       # Carregamento e validação da base de conhecimento
+│   ├── inference.py            # Motor de inferência (forward chaining + fatores de certeza)
+│   ├── skill_gap.py            # Análise de lacunas de competências
+│   ├── roadmap.py              # Gerador de roadmap personalizado
+│   └── advisor.py              # Fachada usada pela interface e pela CLI
+├── ui/
+│   └── charts.py               # Gráficos Altair (ranking, radar, lacunas, composição)
+└── tests/
+    └── test_advisor.py         # Testes automatizados com PyTest
 ```
 
 ---
 
-##  Transparência e Explicabilidade
+##  Como Evoluir a Base de Conhecimento
 
-Diferente de sistemas baseados em caixas-pretas estatísticas, o Consultor Inteligente de Carreiras em TI detalha:
-1. **Regras de Ativação:** Qual regra foi disparada pelo fato declarado e a pontuação somada.
-2. **Regras Cruzadas:** A justificativa técnica que desempatou a carreira recomendada de outras trilhas similares.
-3. **Ranking Comparativo:** Índice percentual de compatibilidade com cada uma das 10 trilhas.
-4. **Roadmap de Estudos:** Próximos passos e tecnologias mandatórias para ingressar na carreira indicada.
+Alterações de regra de negócio são feitas apenas em `data/regras_carreiras.json`:
 
-## Evidências visuais do funcionamento
+- **Nova regra:** adicione um item em `rules` com `if` (condições `all`/`any`/`not` sobre fatos como `affinities.math`, `proficiencies.sql`, `choices.work_preference` ou `traits.analytical`) e `then` (`infer` para derivar fatos ou `evidence` com fatores de certeza por carreira).
+- **Pesos de uma carreira:** ajuste `affinity_profile` e `junior_competencies` em `careers`.
+- **Competências e recursos:** edite `competencies` (pré-requisitos, horas, recursos e exercícios).
+- **Parâmetros do motor:** pesos dos componentes, limiar de ambiguidade e limites de prioridade ficam em `parameters`.
+
+A base é validada ao carregar: referências a carreiras, afinidades ou competências inexistentes geram erro descritivo.
+
+---
+
+## Evidências visuais (versão anterior)
+
+As imagens abaixo mostram a interface da versão anterior, baseada em formulário único e motor Experta.
 
 <img width="1364" height="682" alt="image" src="https://github.com/user-attachments/assets/f1b39471-b6fd-4c42-bb26-339dcdc959cd" />
 
@@ -184,8 +218,3 @@ Diferente de sistemas baseados em caixas-pretas estatísticas, o Consultor Intel
 <img width="1361" height="676" alt="image" src="https://github.com/user-attachments/assets/326ecdca-ba13-4b2b-9b36-aa4d2256215f" />
 
 <img width="1356" height="678" alt="image" src="https://github.com/user-attachments/assets/320b16ed-7884-4aa5-baf2-b1c089e0626e" />
-
-
-
-
-
