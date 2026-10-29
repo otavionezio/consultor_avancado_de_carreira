@@ -221,6 +221,9 @@ A base é validada ao carregar: referências a carreiras, afinidades ou competê
 
 <img width="1917" height="931" alt="image" src="https://github.com/user-attachments/assets/35df4c03-f654-4573-a6f6-caa1a0ee6626" />
 
+<img width="1911" height="936" alt="image" src="https://github.com/user-attachments/assets/df200a40-c296-4f0c-b9a7-5b53164698b5" />
+
+
 
 
 
