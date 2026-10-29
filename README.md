@@ -205,16 +205,24 @@ A base é validada ao carregar: referências a carreiras, afinidades ou competê
 
 ---
 
-## Evidências visuais (versão anterior)
+## Evidências visuais 
 
-As imagens abaixo mostram a interface da versão anterior, baseada em formulário único e motor Experta.
+<img width="1905" height="933" alt="image" src="https://github.com/user-attachments/assets/09d1d1b1-8924-4ea8-bb81-979a6395aa29" />
 
-<img width="1364" height="682" alt="image" src="https://github.com/user-attachments/assets/f1b39471-b6fd-4c42-bb26-339dcdc959cd" />
+<img width="1908" height="932" alt="image" src="https://github.com/user-attachments/assets/17cacdc6-3649-4af1-928e-eeaf461e7258" />
 
-<img width="1361" height="686" alt="image" src="https://github.com/user-attachments/assets/e878bd14-673c-4bff-8972-88366730f8eb" />
+<img width="1908" height="927" alt="image" src="https://github.com/user-attachments/assets/ff4d3551-a181-4498-aa0e-3d123fd572bd" />
 
-<img width="1364" height="680" alt="image" src="https://github.com/user-attachments/assets/f5f33b88-cf5d-4c76-b362-64e98f0d533f" />
+<img width="1907" height="930" alt="image" src="https://github.com/user-attachments/assets/41ef9403-59af-45ea-8a3a-670d4f0ce565" />
 
-<img width="1361" height="676" alt="image" src="https://github.com/user-attachments/assets/326ecdca-ba13-4b2b-9b36-aa4d2256215f" />
+<img width="1908" height="930" alt="image" src="https://github.com/user-attachments/assets/cf64b62b-e5e5-494d-b65e-c2b03f73f336" />
 
-<img width="1356" height="678" alt="image" src="https://github.com/user-attachments/assets/320b16ed-7884-4aa5-baf2-b1c089e0626e" />
+<img width="1910" height="934" alt="image" src="https://github.com/user-attachments/assets/74d90336-1a7b-405c-9bb8-710d5e45b5f4" />
+
+<img width="1917" height="931" alt="image" src="https://github.com/user-attachments/assets/35df4c03-f654-4573-a6f6-caa1a0ee6626" />
+
+
+
+
+
+
